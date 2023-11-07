@@ -1,4 +1,4 @@
-### Process of textual semantic search
+## Process of textual semantic search
 
 
 - Clean and process corpus
@@ -10,7 +10,7 @@
 - [optional] Rerank the hits using a cross encoder
 - Serve the top k hits
 
-### Mechanism of semantic search
+## Mechanism of semantic search
 
 Masked language modelling used specifically to create sentence embeddings creates a representation of each sentence in corpus with an n-dimensional relationship with every other sentence in the corpus. So instead of isolated words, meanings of phrases and paragraphs are encoded. Depending on the training and model, these relationships could be accessed using cosine similarity or euclidean distances. 
 
@@ -64,9 +64,7 @@ As a thinking tool, semantic search is a definite improvement over lexical but i
 
 The difference between search and recommendation, as in the engineering of these things, is that search is a function that takes in the query (q) and matches it to the corpus (c) to produce a result, where as recommendations add a variable -- the user's known or presumed preferences (p) to the same function (or even without a query, just the $p$ and the $c$). 
  
-$$ search\_result = f(q, c) $$ 
-
-$$ recommendation = f(q, p, c)$$ 
+$search\_result = f(q, c)$ whereas $recommendation = f(q, p, c)$ 
 
 The $p$ can be derived in a wide variety of ways. The most popular one is collaborative filtering, in which if the user says i like this poem, you  then look at all the other people who like this poem, find the other poems they liked, and recommend them to this user. This assumes that people who like things like similar things. 
 
