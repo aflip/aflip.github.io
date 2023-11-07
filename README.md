@@ -1,14 +1,13 @@
-# Anand Philip: ML Projects and coding related notes
-
 
 ## Projects
 
 [MoodMuse](https://github.com/aflip/mood-muse)
 
 An app for discovering poetry using embedding-based semantic retrieval
-[What is semantic search and why do we want it](https://anandphilip.com/what-is-semantic-search-and-why-do-we-want-it/) Blog post about the idea of semantic and lexical search. 
 
-[MoodMuse Demo App](https://starry-eyed-geometry.anvil.app/)
+[What is semantic search and why do we want it](https://anandphilip.com/what-is-semantic-search-and-why-do-we-want-it/): Blog post about the idea of semantic and lexical search. 
+
+[Try it out: MoodMuse demo app](https://starry-eyed-geometry.anvil.app/)
 
 [Training and coding notes](semanticsearch.md) about semantic search 
 
