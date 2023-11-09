@@ -9,7 +9,7 @@ An app for discovering poetry using embedding-based semantic retrieval
 
 [Try it out: MoodMuse demo app](https://starry-eyed-geometry.anvil.app/)
 
-[Training and coding notes](semsearchnotes.html) about semantic search 
+[Training and coding notes](semsearchnotes.md) about semantic search 
 
 
 ### [Explore IDSP](https://github.com/aflip/IDSP)
