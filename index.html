@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>semsearchnotes</title>
+<title>semanticsearch</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,16 +23,16 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="semsearchnotes_files/libs/clipboard/clipboard.min.js"></script>
-<script src="semsearchnotes_files/libs/quarto-html/quarto.js"></script>
-<script src="semsearchnotes_files/libs/quarto-html/popper.min.js"></script>
-<script src="semsearchnotes_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="semsearchnotes_files/libs/quarto-html/anchor.min.js"></script>
-<link href="semsearchnotes_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="semsearchnotes_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="semsearchnotes_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="semsearchnotes_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="semsearchnotes_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="semanticsearch_files/libs/clipboard/clipboard.min.js"></script>
+<script src="semanticsearch_files/libs/quarto-html/quarto.js"></script>
+<script src="semanticsearch_files/libs/quarto-html/popper.min.js"></script>
+<script src="semanticsearch_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="semanticsearch_files/libs/quarto-html/anchor.min.js"></script>
+<link href="semanticsearch_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="semanticsearch_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="semanticsearch_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="semanticsearch_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="semanticsearch_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -47,8 +47,8 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="process-of-textual-semantic-search" class="level3">
-<h3 class="anchored" data-anchor-id="process-of-textual-semantic-search">Process of textual semantic search</h3>
+<section id="process-of-textual-semantic-search" class="level2">
+<h2 class="anchored" data-anchor-id="process-of-textual-semantic-search">Process of textual semantic search</h2>
 <ul>
 <li>Clean and process corpus</li>
 <li>[optional] Enrich the data so that there are features in the data that assist better matches to queries.</li>
@@ -60,13 +60,12 @@ ul.task-list li input[type="checkbox"] {
 <li>Serve the top k hits</li>
 </ul>
 </section>
-<section id="mechanism-of-semantic-search" class="level3">
-<h3 class="anchored" data-anchor-id="mechanism-of-semantic-search">Mechanism of semantic search</h3>
+<section id="mechanism-of-semantic-search" class="level2">
+<h2 class="anchored" data-anchor-id="mechanism-of-semantic-search">Mechanism of semantic search</h2>
 <p>Masked language modelling used specifically to create sentence embeddings creates a representation of each sentence in corpus with an n-dimensional relationship with every other sentence in the corpus. So instead of isolated words, meanings of phrases and paragraphs are encoded. Depending on the training and model, these relationships could be accessed using cosine similarity or euclidean distances.</p>
 <p>When we encode the query using the same model, we make the query exist in the same vector space as the rest of the corpus. This means that the distance metric used for encoding can be used for decoding.</p>
 <p>Search is calculating the cosine-distance between the query and the text in the corpus and returning the top ranked or closest results. This means the poems that get recommended contain terms or phrases or words that are similar to the query. This allows for approximate meaning matching. Instead of searching seperately for knife|fork|spoon , just search for cutlery and all the related text will be found.</p>
 <p>If you are searching for highly deterministic answers in a document corpus, let’s say a medical data corpus and you want to find out the different antibiotics used for disease x, this is very useful. This is a pure retrieval kind of task and pure semantic retrieval is a great addition to, or improvement on pure lexical search. I explore the differences in my post here: What is semantic search and wny do we want it (https://anandphilip.com/what-is-semantic-search-and-why-do-we-want-it/).</p>
-</section>
 <section id="training-notes." class="level3">
 <h3 class="anchored" data-anchor-id="training-notes.">Training Notes.</h3>
 <p>When it comes to poetry, users desire recommendations, not just matches. Instead of finding poems that merely contain the query’s terms or related words, we seek instances where the themes, emotions, or concepts in the query are explored within the poems. This is a nuanced challenge.</p>
@@ -94,8 +93,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="recommendations-not-search" class="level3">
 <h3 class="anchored" data-anchor-id="recommendations-not-search">Recommendations, not search</h3>
 <p>The difference between search and recommendation, as in the engineering of these things, is that search is a function that takes in the query (q) and matches it to the corpus (c) to produce a result, where as recommendations add a variable – the user’s known or presumed preferences (p) to the same function (or even without a query, just the <span class="math inline">\(p\)</span> and the <span class="math inline">\(c\)</span>).</p>
-<p><span class="math display">\[ search\_result = f(q, c) \]</span></p>
-<p><span class="math display">\[ recommendation = f(q, p, c)\]</span></p>
+<p><span class="math inline">\(search\_result = f(q, c)\)</span> whereas <span class="math inline">\(recommendation = f(q, p, c)\)</span></p>
 <p>The <span class="math inline">\(p\)</span> can be derived in a wide variety of ways. The most popular one is collaborative filtering, in which if the user says i like this poem, you then look at all the other people who like this poem, find the other poems they liked, and recommend them to this user. This assumes that people who like things like similar things.</p>
 <p>Other components of <span class="math inline">\(p\)</span> could be</p>
 <ul>
@@ -115,6 +113,7 @@ ul.task-list li input[type="checkbox"] {
 <li>update the search and ranking method to add these features</li>
 </ol>
 <p>More information about design patterns in recommendation systems can be found here: Yan, Ziyou. (Jun 2021). <a href="https://eugeneyan.com/writing/system-design-for-discovery/">System Design for Recommendations and Search. eugeneyan.com.</a></p>
+</section>
 </section>
 
 </main>
