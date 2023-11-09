@@ -1,3 +1,10 @@
+---
+title: "Semantic Search Development Notes"
+format:
+  html:
+    toc: true
+    html-math-method: katex
+---
 ## Process of textual semantic search
 
 
@@ -16,7 +23,7 @@ Masked language modelling used specifically to create sentence embeddings create
 
 When we encode the query using the same model, we make the query exist in the same vector space as the rest of the corpus. This means that the distance metric used for encoding can be used for decoding. 
 
-Search is calculating the cosine-distance between the query and the text in the corpus and returning the top ranked or closest results. This means the poems that get recommended contain terms or phrases or words that are similar to the query. This allows for approximate meaning matching. Instead of searching seperately for knife|fork|spoon , just search for cutlery and all the related text will be found. 
+Search is calculating the cosine-distance between the query and the text in the corpus and returning the top ranked or closest results. This means the poems that get recommended contain terms or phrases or words that are similar to the query. This allows for approximate meaning matching. Instead of searching seperately for knife\|fork\|spoon , just search for cutlery and all the related text will be found. 
 
 If you are searching for highly deterministic answers in a document corpus, let's say a medical data corpus and you want to find out the different antibiotics used for disease x, this is very useful. This is a pure retrieval kind of task and pure semantic retrieval is a great addition to, or improvement on pure lexical search.  I explore the differences in my post here: What is semantic search and wny do we want it (https://anandphilip.com/what-is-semantic-search-and-why-do-we-want-it/). 
 
@@ -47,7 +54,7 @@ eg.
 
 search tone : bitter
 
-search theme: love | loss
+search theme: love/loss
 
 search setting: cafe
 
@@ -64,7 +71,11 @@ As a thinking tool, semantic search is a definite improvement over lexical but i
 
 The difference between search and recommendation, as in the engineering of these things, is that search is a function that takes in the query (q) and matches it to the corpus (c) to produce a result, where as recommendations add a variable -- the user's known or presumed preferences (p) to the same function (or even without a query, just the $p$ and the $c$). 
  
-$search\_result = f(q, c)$ whereas $recommendation = f(q, p, c)$ 
+$search\_result = f(q, c)$ 
+
+whereas 
+
+$recommendation = f(q, p, c)$ 
 
 The $p$ can be derived in a wide variety of ways. The most popular one is collaborative filtering, in which if the user says i like this poem, you  then look at all the other people who like this poem, find the other poems they liked, and recommend them to this user. This assumes that people who like things like similar things. 
 
