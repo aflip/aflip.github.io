@@ -1,11 +1,4 @@
----
-title: "Semantic Search Project Notes"
-format:
-  html:
-    toc: true
-    html-math-method: katex
-    css: styles.css
----
+# Semantic Search Project Notes
 
 ## Process of textual semantic search
 
