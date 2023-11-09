@@ -1,3 +1,12 @@
+---
+title: "Anand Philip: Projects &  Notes"
+format:
+  html:
+    html-math-method: katex
+    css: styles.css
+---
+
+
 # Anand Philip: Projects &  Notes
 
 ## Projects
