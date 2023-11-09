@@ -1,7 +1,7 @@
 
 ## Projects
 
-[MoodMuse](https://github.com/aflip/mood-muse)
+### [MoodMuse](https://github.com/aflip/mood-muse)
 
 An app for discovering poetry using embedding-based semantic retrieval
 
