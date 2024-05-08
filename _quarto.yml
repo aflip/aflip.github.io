@@ -1,7 +1,8 @@
 project:
   type: website
   output-dir: docs
-
+execute:
+  freeze: auto 
 website:
   title: "Bold: Research and Development"
   site-url: http://boldresearch.org

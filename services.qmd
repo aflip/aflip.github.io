@@ -12,6 +12,8 @@ I provide consulting services to startups seeking insights and guidance from a c
 
 Contact me if you would like to work on applied machine learning /AI in healthcare or really anything ML. Email, Mastodon, Linkedin are all good ways to get in touch. Details below. 
 
+I am mostly located in Bengaluru, India. 
+
 ### Modelling 
 
 1. **Data Analysis and Statistical Modeling**
