@@ -1,0 +1,79 @@
+---
+title: "Services offered at BOLD"
+Author: "Anand Philip"
+search: true
+format:
+  html:
+    toc: True
+
+---
+
+I provide consulting services to startups seeking insights and guidance from a clinical technologist specializing in data/ML/AI and decision-related domains. I am as happy to talk strategy as doing data modelling. Especially if we can talk about ethics and risk upfront.
+
+Contact me if you would like to work on applied machine learning /AI in healthcare or really anything ML. Email, Mastodon, Linkedin are all good ways to get in touch. Details below. 
+
+### Modelling 
+
+1. **Data Analysis and Statistical Modeling**
+
+   - **Service Description**: Analyzing complex data sets to identify patterns, trends, and relationships using statistical methods.
+   - **Examples**: Using regression analysis to predict patient readmission rates based on historical health data. Analyzing customer behavior and sales data to forecast demand for different product lines.
+   - **Options**: Customized statistical models tailored to specific health outcomes or business or research questions. Development of predictive models for customer lifetime value, market segmentation, and inventory management.
+   
+
+2. **Machine Learning Modeling**
+   - **Service Description**: Developing predictive and prescriptive models using machine learning algorithms to automate decision-making.
+   - **Example**: Creating a machine learning model to classify different types of mammogram results as benign or malignant.
+   - **Options**: Selection from a variety of ML algorithms (e.g., decision trees, neural networks, support vector machines) based on data characteristics and objectives.
+
+3. **Model Improvement & Refinement**
+
+   - **Service Description**: Enhancing the performance of existing models through techniques like hyperparameter tuning and feature engineering.
+   - **Example**: Improving the accuracy of a diabetes risk prediction model by optimizing its algorithms and incorporating additional patient data.
+   - **Options**: Iterative model refinement cycles, performance benchmarking against industry standards.
+
+### Strategic AI Use
+
+1. **Strategic Guidance on AI/ML Implementation within Healthcare Contexts**
+   - **Service Description**: Consulting on the strategic integration of AI and machine learning technologies into healthcare organizations.
+   - **Example**: Advising on the development of an AI-driven patient triage system in a hospital setting.
+   - **Options**: Roadmap development, resource planning, risk assessment.
+
+2. **Feasibility Studies for AI Applications**
+   - **Service Description**: Assessing the viability and potential impact of AI applications within specific healthcare domains.
+   - **Example**: Evaluating the feasibility of using AI for real-time monitoring and intervention in critical care units.
+   - **Options**: Cost-benefit analysis, market analysis, technical feasibility assessment.
+
+3. **Evaluation of Existing AI Products**
+   - **Service Description**: Assessing the effectiveness, reliability, and ethical implications of existing AI products in healthcare.
+   - **Example**: Reviewing an AI-powered tool for automated diagnosis of skin conditions.
+   - **Options**: Performance testing, user experience evaluation, ethical impact analysis.
+
+
+
+### Ethics & Law
+
+1. **Designing Policies and Practical Guidelines for High-Quality ML Products and Research**
+   - **Service Description**: Developing ethical frameworks and operational guidelines to ensure the integrity and reliability of machine learning initiatives.
+   - **Example**: Establishing data privacy policies and bias mitigation strategies for an AI-powered diagnostic tool.
+   - **Options**: Compliance with international standards and regulations (e.g., DISHA, GDPR, HIPAA).
+
+2. **Workshops on Figuring Out Ethical Issues and Designing an Ethical Approach**
+   - **Service Description**: Interactive sessions to help organizations identify and address ethical challenges in AI and machine learning projects.
+   - **Example**: A workshop on ethical considerations in using genetic data for predictive health analytics.
+   - **Options**: Tailored workshops for different stakeholder groups (e.g., developers, executives, ethicists).
+
+### Teaching
+
+1. **Basics of ML/DL/AI for Health Professionals**
+   - **Service Description**: Introducing fundamental concepts of machine learning, deep learning, and artificial intelligence to healthcare professionals.
+   - **Example**: An introductory course on how AI can be used in patient care and clinical decision-making.
+   - **Options**: Online courses, in-person workshops.
+
+2. **How to Use ML in Your Research for Health/Bio Scientists**
+   - **Service Description**: Training for health and bioscience researchers on applying machine learning techniques to their research projects.
+   - **Example**: A workshop on using machine learning for disease pattern recognition
+   - **Options**: Hands-on projects, case study analysis, personalized mentorship.
+
+
+## Get in touch [{{< fa envelope   title="icon of an envelope" >}}](mailto:hello@boldresearch.org)  [{{< fa brands mastodon title="mastodon icon" >}}](https://sigmoid.social/@anandphilipc) [{{< fa brands linkedin  title="linkedin icon" >}}](https://www.linkedin.com/in/anandphilip/) [{{< fa brands twitter  title="twitter icon" >}}](https://www.twitter.com/anandphilipc/)

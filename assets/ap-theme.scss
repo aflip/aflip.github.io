@@ -1,0 +1,227 @@
+/*-- scss:defaults --*/
+
+$theme: "flatly" !default;
+
+
+// import fonts
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+
+// Colors
+
+$white: #fff !default;
+$gray-100: #F8F8FA !default;
+$gray-200: #E9E9EF !default;
+$gray-300: #DCDCE6 !default;
+$gray-400: #CECEDA !default;
+$gray-500: #ADADBD !default;
+$gray-600: #868696 !default;
+$gray-700: #494957 !default;
+$gray-800: #343440 !default;
+$gray-900: #212129 !default;
+$black: #000 !default;
+
+
+$seance-50: #faf6fe;
+$seance-100: #f4eafd;
+$seance-200: #ebd9fb;
+$seance-300: #dcbbf7;
+$seance-400: #c690f0;
+$seance-500: #b065e7;
+$seance-600: #9b45d8;
+$seance-700: #8633bd;
+$seance-800: #682b8f;
+$seance-900: #5c277c;
+$seance-950: #3f105b;
+$seance-95069: #14051c;
+
+
+
+
+$ap-light: #f5f3f0;
+$ap-dark: $seance-950;
+$ap-darker: $seance-95069;
+$ap-primary: $seance-800;
+$ap-secondary: #b82e84;
+$ap-accent1: #4f93fa;
+$ap-accent2: #f64b4b;
+$ap-accent3: #f4e61a;
+$ap-success: #35a86e;
+$ap-warning: #ffad00;
+$ap-danger: #872917;
+// #ee3778
+// #d13fa0
+// $ap-secondary: #522ca9;
+
+// Setting colors
+
+
+$primary: $ap-primary !default;
+$secondary: $ap-secondary !default;
+$success: $ap-success !default;
+$info: $ap-accent3 !default;
+$warning: $ap-warning !default;
+$danger: $ap-danger !default;
+$light: $ap-light !default;
+$dark: $ap-dark !default;
+
+
+// colour tweaks to theme
+
+
+$body-bg: $ap-light;
+$body-color: $ap-darker;
+$navbar-bg: $body-bg;
+$navbar-fg: $body-color;
+$code-bg: $gray-100;
+
+
+// Fonts
+
+
+$font-family-sans-serif: "Fira Sans", sans-serif !default;
+$font-family-monospace: "Fira Code", monospace !default;
+$font-family-serif: "IBM Plex Serif", serif !default;
+$font-family-base: $font-family-sans-serif !default;
+$font-family-code: $font-family-monospace !default;
+
+
+$font-weight-normal: 400 !default;
+$font-weight-light: 300 !default;
+$font-weight-lighter: 200 !default;
+$font-weight-lightest: 100 !default;
+
+
+// font sizes
+
+$font-size-base: 1.1rem !default; 
+$h1-font-size: $font-size-base * 2.5 !default;
+$h2-font-size: $font-size-base * 2 !default;
+$h3-font-size: $font-size-base * 1.75 !default;
+$h4-font-size: $font-size-base * 1.5 !default;
+$h5-font-size: $font-size-base * 1.25 !default;
+$h6-font-size: $font-size-base !default;
+
+
+// Line height
+
+$line-height-base: 1.65 !default;
+$line-height-sm: 1.25 !default;
+$line-height-lg: 2 !default;
+
+// working with links 
+
+
+$link-color: $ap-secondary !default;
+$link-decoration: none !default;
+$link-shade-percentage: 20% !default;
+$link-hover-color: shift-color($link-color, $link-shade-percentage) !default;
+$link-hover-decoration: underline !default;
+
+
+
+/*-- scss:rules --*/
+
+body{
+    opacity: 0.9;
+}
+
+h1 , .h1{
+    font-family: $font-family-monospace;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+;
+
+h2, .h2 {
+    font-family: $font-family-monospace;
+    font-weight: $font-weight-normal;
+}
+
+;
+
+h3,
+h4,
+h5,
+h6 {
+    font-family: $font-family-monospace;
+    font-weight: $font-weight-lightest;
+}
+
+;
+
+.icon-line {
+    display: block;
+    background: $secondary;
+    width: 100%;
+    height: 4px;
+    margin: auto;
+    display: table;
+    margin-top: -10px;
+    margin-bottom: -1px;
+}
+
+;
+
+.navbar-title {
+    font-family: $font-family-monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2rem;
+}
+
+;
+
+.bold {
+    font-family: $font-family-monospace;
+    font-optical-sizing: auto;
+    text-decoration: underline 4px;
+    text-decoration-color: $secondary;
+}
+
+;
+
+.mono {
+    font-family: $font-family-monospace;
+    font-optical-sizing: auto;
+    text-decoration: underline 4px;
+    text-decoration-color: $secondary;
+
+}
+
+;
+
+.icon-link {
+    background-color: transparent;
+    color: $secondary;
+    border: 1px solid;
+    border-color: $secondary;
+    display: inline-block;
+    text-decoration: none;
+    padding: 5px 0.4rem 5px 0.4rem !important;
+    margin-top: 4px;
+    margin-right: 8px;
+    margin-bottom: 4px;
+    border-radius: 5px;
+}
+
+;
+
+.large-p {
+    font-size: $h5-font-size;
+    line-height: $line-height-base;
+}
+
+;
+
+.card {
+    background-color: $body-bg;
+    border: 1px dashed $primary;
+    border-radius: 5px;
+    margin-bottom: 1.65rem;
+}
+
+;

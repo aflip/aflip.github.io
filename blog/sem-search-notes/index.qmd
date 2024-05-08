@@ -1,0 +1,101 @@
+---
+Title: Notes from implementing semantic search
+description: training notes
+Author: "Anand Philip"
+date: 16-November-2023
+image: embedding-explorer.png
+search: true
+graph: true
+format:
+  html:
+    toc: true
+    level: 2
+---
+
+
+>“If cats looked like frogs we'd realize what nasty, cruel little bastards they are. Style. That's what people remember.” ― Terry Pratchett, Lords and Ladies 
+
+## Steps for implementing semantic search on a text corpus
+
+-   Clean and process corpus
+-   \[optional\] Enrich the data so that there are features in the data that assist better matches to queries.
+-   Embed corpus on a sentence embedding model
+-   Index embedding using some ANN like NGT/FAISS/HNSW
+-   Embed query using the same model
+-   Search index using query embedding
+-   \[optional\] Rerank the hits using a cross encoder
+-   Serve the top k hits
+
+## Mechanism of semantic search
+
+Masked language modelling used specifically to create sentence embeddings creates a representation of each sentence in corpus with an n-dimensional relationship with every other sentence in the corpus. So instead of isolated words, meanings of phrases and paragraphs are encoded. Depending on the training and model, these relationships could be accessed using cosine similarity or euclidean distances.
+
+When we encode the query using the same model, we make the query exist in the same vector space as the rest of the corpus. This means that the distance metric used for encoding can be used for decoding.
+
+Search is calculating the cosine-distance between the query and the text in the corpus and returning the top ranked or closest results. This means the poems that get recommended contain terms or phrases or words that are similar to the query. This allows for approximate meaning matching. Instead of searching seperately for knife\|fork\|spoon , just search for cutlery and all the related text will be found.
+
+If you are searching for highly deterministic answers in a document corpus, let's say a medical data corpus and you want to find out the different antibiotics used for disease x, this is very useful. This is a pure retrieval kind of task and pure semantic retrieval is a great addition to, or improvement on pure lexical search. I explore the differences in my post here: What is semantic search and wny do we want it (https://anandphilip.com/what-is-semantic-search-and-why-do-we-want-it/).
+
+## Training Notes.
+
+When it comes to poetry, users desire recommendations, not just matches. Instead of finding poems that merely contain the query's terms or related words, we seek instances where the themes, emotions, or concepts in the query are explored within the poems. This is a nuanced challenge.
+
+If I search for "our relationship with technology" instead of matching poems that contain th term or related terms to "relationship" and or "technology", I want instances of the relationship explored in the poems.
+
+Features that are relevant to the recommendations are things like
+
+-   Settings - physical setting like sunrise, sunset dusk etc. emotional settings like break ups, winning a lottery, death etc.
+-   Themes as in the emotive theme or philosophical theme , eg dealing with death, impermanence of life, nature
+-   Tone- humor, sarcasm, bitterness
+-   Style - acrostic, free verse, etc.
+
+In order to improve the retrieval, I used [VLLM](https://vllm.readthedocs.io/en/latest/) and [Wizard Vicuna](https://huggingface.co/TheBloke/Wizard-Vicuna-13B-Uncensored-GPTQ) to enrich the documents, I generated a list of emotions, themes and tones of the poem which I appended to the poem before embedding so that some descriptive stuff is also added to the retrieval. I think this has improved the retrieval a lot. but still, it's tricky to coax a model into coherently give you answers to "this poem is an instance of" to enrich the document.
+
+When I was first reading about semantic search, I thought this would be search that understood my query and then found what was matching that. But really what search of any kind does (as long as the unit of query is words and fitness of match is also based on words) is optimizing the similarity between the query and the text. This to me is just a variation of lexical search. So embedding based retrieval is better at lexical semantics than really parsing the query and extracting the meaning from it.
+
+By [lexical semantics](https://en.wikipedia.org/wiki/Lexical_semantics) here I am referring to the structural and functional relationships between word and their meanings that are encoded in text corpora. IN linguistics these are [represented](https://en.wikipedia.org/wiki/Hyponymy_and_hypernymy) as semantic networks or ontologies. The word color is a semantic neighbor of the words red, green and yellow. confusingly they are not lexical neighbors.
+
+What would be cool is if you could search for 'bitter poem about love set in a cafe'. in this case if we had ways to identify the different components of the query and then run separate searches, or some chaining of searches, that could improve things.
+eg.
+
+- search tone : bitter
+- search theme: love \| loss
+- search setting: cafe
+
+But as you can imagine, this creates too many moving parts to manage.
+
+A shortcut would be use a LLM to do query expansion and that is the approach most current papers and large organizations seem to be exploring. It's just that that is so resource intensive, and generally needs cloud computing.
+
+Could this situation be improved using different types of embeddings. eg. embeddings that are designed for topic modelling or identifying and retaining topic and ontological models of the text? I think so. But do not have enough empirical evidence.
+
+As a thinking tool, semantic search is a definite improvement over lexical but I think there are still many problems left to solve here.
+
+## Recommendations, not search
+
+The difference between search and recommendation, as in the engineering of these things, is that search is a function that takes in the query (q) and matches it to the corpus (c) to produce a result, where as recommendations add a variable -- the user's known or presumed preferences (p) to the same function (or even without a query, just the $p$ and the $c$).
+
+$search\_result = f(q, c)$
+
+whereas
+
+$recommendation = f(q, p, c)$
+
+The $p$ can be derived in a wide variety of ways. The most popular one is collaborative filtering, in which if the user says i like this poem, you then look at all the other people who like this poem, find the other poems they liked, and recommend them to this user. This assumes that people who like things like similar things.
+
+Other components of $p$ could be
+
+-   The item’s properties (long poem, short poem, language etc.)
+-   The user’s preferences and interaction history (liked 3 poems by Plath and is now searching for microwaves)
+-   A query or other information need provided by the user (in an imaginary interface, the user could point to a poem and say, similar but less sad)
+-   The context at the point and time of recommendation
+-   Business logic (show sponsored results first for eg.)
+
+This is explored more in [Michael D. Ekstrand and Joseph A. Konstan. 2019. Recommender Systems Notation:](https://md.ekstrandom.net/pubs/notation) Proposed Common Notation for Teaching and Research. Computer Science Faculty Publications and Presentations 177. Boise State University. DOI 10.18122/cs_facpubs/177/boisestate. arXiv:1902.01348
+
+## Converting search into recommendations
+
+1.  Add some way of taking in user preferences either upfront, or for each search result
+2.  Use these to create (or match) a features for your corpus
+3.  update the search and ranking method to add these features
+
+More information about design patterns in recommendation systems can be found here: Yan, Ziyou. (Jun 2021). [System Design for Recommendations and Search. eugeneyan.com.](https://eugeneyan.com/writing/system-design-for-discovery/)

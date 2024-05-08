@@ -1,0 +1,75 @@
+---
+page-layout: full
+Author: "Anand Philip"
+search: true
+format:
+  html:
+    toc: false
+    css: styles.css
+---
+<div class="grid">
+
+<div class="g-col-12 g-col-md-6">
+# Hi, I'm Anand Philip
+
+<p class="large-p">
+I'm a family physician interested in how information technology can improve (or worsen) decision making in and outside healthcare. 
+</p>
+This fuels **Bold**, my health-tech R&D practice where I build tools for my clients using the best technology for the problem. Sometimes these are ML/AI models and sometimes these are guildelines.
+
+Read more about specific services I offer [here](services.qmd)
+
+</div>
+
+<div class="g-col-12 g-col-md-6">
+<img src="assets/fPX9EXMc_400x400.jpg" class="img-fluid rounded float-right" style="max-width:400px;margin-top:2rem;" alt="Black And white photograph of Anand Philip" >
+</div>
+
+</div>
+
+## Ongoing Projects
+
+<div class="grid">
+
+<div class="g-col-12 g-col-md-6" >
+<h3>Ethics [{{< fa book-open-reader >}}](#ethics)</h3>
+I have put togeter a basic reading list and explanation of the main schools of thoughts about [Ethics in AI ](https://anandphilip.com/ethical-ai-basic-reading-schools-of-thought-an-overview/) \[external link\]
+
+I am editing an [Anthill Inside session on AI and Risk Mitigation](https://hasgeek.com/anthillinside/ai-and-risk-mitigation/).  My co-editor [Dr. Hannah Thomas](https://www.linkedin.com/in/hannah-mary-thomas-t-838a0113/?originalSubdomain=in) and I are working with Health-AI companies to develop priorities, guidelines and resources for the use of AI in healthcare in India. 
+
+- [AI Challenges in Radiology](https://hasgeek.com/anthillinside/navigating-ai-challenges-in-radiology/) A discussion with 5C Network
+- [Ethical Concerns in Use of AI in Healthcare](https://hasgeek.com/anthillinside/ethical-concerns-in-use-of-ai-in-healthcare/) A discussion with Dr. Olinda Timms
+</div>
+
+<div class="g-col-12 g-col-md-6"> 
+<h3>Semantic Search [{{< fa brands github >}}](https://github.com/aflip/mood-muse)</h3> 
+
+Last year I did a deep dive into semantic and vector based search, made a poetry recommendation app and generally had a bunch of fun learning a lot of new stuff. If you've ever wanted better search, semantic search is one of the solutions. This is an area I am actively working on.
+
+- [What is semantic search and why do we want it.](blog/what-is-semantic-search/index.qmd) This is a non-technical explanation.  
+- [Technical notes](blog/sem-search-notes/index.qmd) about semantic search and how to implement it
+- The repo has training notebooks and more
+
+</div>
+
+<div class="g-col-12 g-col-md-6">
+<h3> Statistics [{{< fa brands github >}}](https://github.com/aflip/biostats-with-python)</h3></h3>
+
+
+In collaboration with Medibuddy, I created a guide to conducting and selecting statistical tests using Python. This guide serves as a quick reference for their research team, promoting standardization and efficiency in research workflows. You can read the whole guide and run it on colab here: 
+
+- [Parametric and non-parametric tests in {{< fa brands python >}} python](blog/biostat-with-python-01/01-BWP-deploy-bold.html)
+- Watch the repo for further notebooks/installations as this is under active development
+</div>
+
+</div>
+
+## Get in touch [{{< fa envelope   title="icon of an envelope" >}}](mailto:hello@boldresearch.org)  [{{< fa brands mastodon title="mastodon icon" >}}](https://sigmoid.social/@anandphilipc) [{{< fa brands linkedin  title="linkedin icon" >}}](https://www.linkedin.com/in/anandphilip/) [{{< fa brands twitter  title="twitter icon" >}}](https://www.twitter.com/anandphilipc/)
+
+## Fuelled by:  <img src="assets/Tux_Classic_flat_look_v1.1.svg.png" width="50px" alt="linux logo" /> <img src="assets/python-logo-only.png" width="50px" alt="python logo" /> <img src="assets/jupyter_icon.svg" width="50px" alt ="jupyter logo" /> <img src="assets/Artboard 61.svg" width="50px" alt="pandas logo"/> <img src="assets/numpylogoicon.png" width="60px" alt="numpy logo" /> <img src="assets/hf-logo.svg" width="60px" alt ="huggingface transformers logo" />
+
+</p>
+
+
+
+# Be <span class= "bold"> B</span>older, My Friend
