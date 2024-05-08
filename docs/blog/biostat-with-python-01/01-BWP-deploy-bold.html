@@ -1,0 +1,2773 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-05-01">
+<meta name="description" content="A guide to conducting and selecting statistical tests in Python">
+
+<title>Bold: Research and Development - Statistical tests for biomedical research with python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/bold-logo-g.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">B<span class="icon-line"></span> <span class="hidden" data-render-id="quarto-int-navbar:Home">Home</span> <span class="hidden" data-render-id="quarto-int-navbar:/index.html">/index.html</span> <span class="hidden" data-render-id="quarto-int-navbar:Services">Services</span> <span class="hidden" data-render-id="quarto-int-navbar:/services.html">/services.html</span> <span class="hidden" data-render-id="quarto-int-navbar:Technical blog">Technical blog</span> <span class="hidden" data-render-id="quarto-int-navbar:/posts.html">/posts.html</span> <span class="hidden" data-render-id="quarto-int-navbar:Personal Blog">Personal Blog</span> <span class="hidden" data-render-id="quarto-int-navbar:https://anandphilip.com">https://anandphilip.com</span></span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../services.html" rel="" target="">
+ <span class="menu-text">Services</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html" rel="" target="">
+ <span class="menu-text">Technical blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://anandphilip.com" rel="" target="_blank">
+ <span class="menu-text">Personal Blog</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#requirements" id="toc-requirements" class="nav-link active" data-scroll-target="#requirements">Requirements</a></li>
+  <li><a href="#tests-by-variable-type" id="toc-tests-by-variable-type" class="nav-link" data-scroll-target="#tests-by-variable-type">Tests by variable type</a></li>
+  <li><a href="#non-parametric" id="toc-non-parametric" class="nav-link" data-scroll-target="#non-parametric">Non parametric</a>
+  <ul class="collapse">
+  <li><a href="#pearson" id="toc-pearson" class="nav-link" data-scroll-target="#pearson">Pearson</a></li>
+  <li><a href="#spearmans-rank-correlation" id="toc-spearmans-rank-correlation" class="nav-link" data-scroll-target="#spearmans-rank-correlation">Spearman’s rank correlation</a></li>
+  <li><a href="#chi-squared" id="toc-chi-squared" class="nav-link" data-scroll-target="#chi-squared">Chi-Squared</a></li>
+  <li><a href="#wilcoxonmannwhitney-wilcoxon-rank-sum-test" id="toc-wilcoxonmannwhitney-wilcoxon-rank-sum-test" class="nav-link" data-scroll-target="#wilcoxonmannwhitney-wilcoxon-rank-sum-test">Wilcoxon–Mann–Whitney (Wilcoxon rank-sum test)</a></li>
+  <li><a href="#wilcoxon-signed-rank-test" id="toc-wilcoxon-signed-rank-test" class="nav-link" data-scroll-target="#wilcoxon-signed-rank-test">Wilcoxon signed-rank test</a></li>
+  </ul></li>
+  <li><a href="#parametric" id="toc-parametric" class="nav-link" data-scroll-target="#parametric">Parametric</a>
+  <ul class="collapse">
+  <li><a href="#independent-t-test" id="toc-independent-t-test" class="nav-link" data-scroll-target="#independent-t-test">Independent T-test</a></li>
+  <li><a href="#paired-t-test" id="toc-paired-t-test" class="nav-link" data-scroll-target="#paired-t-test">Paired T-test</a></li>
+  <li><a href="#students-t-test-or-1-sample-t-test" id="toc-students-t-test-or-1-sample-t-test" class="nav-link" data-scroll-target="#students-t-test-or-1-sample-t-test">Student’s t-Test or 1-sample T-test</a></li>
+  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova">Anova</a></li>
+  <li><a href="#ancova" id="toc-ancova" class="nav-link" data-scroll-target="#ancova">Ancova</a></li>
+  </ul></li>
+  <li><a href="#other-tests" id="toc-other-tests" class="nav-link" data-scroll-target="#other-tests">Other tests</a>
+  <ul class="collapse">
+  <li><a href="#shapiro-wilk" id="toc-shapiro-wilk" class="nav-link" data-scroll-target="#shapiro-wilk">Shapiro-wilk</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Statistical tests for biomedical research with python</h1>
+</div>
+
+<div>
+  <div class="description">
+    A guide to conducting and selecting statistical tests in Python
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 1, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><a target="_blank" href="https://colab.research.google.com/github/aflip/biostats-with-python/blob/main/01-BWP-deploy.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"> </a></p>
+<blockquote class="blockquote">
+<p>“And what would humans be without love?”<br>
+RARE, said Death.”<br>
+― Terry Pratchett, Sourcery</p>
+</blockquote>
+<p>This resource was created for Medibuddy</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://medibuddy.in"><img src="medibuddy-logo.png" class="img-fluid figure-img"></a></p>
+<figcaption class="figure-caption">Medibuddy logo</figcaption>
+</figure>
+</div>
+<p><a href="https://www.linkedin.com/in/arpitha-jacob-1aa4201b/">Dr.&nbsp;Arpitha Jacob</a> helped with corrections and improvements</p>
+<section id="requirements" class="level2">
+<h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  Dev conditions:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  Python 3.11.7</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  Pandas 2.2.0</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  numpy 1.26.4</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  Pingouin 0.5.4</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  scipy 1.12.0</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  seaborn 0.13.2</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  matplotlib 3.8.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries needed to run this notebook</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># !pip install pandas pingouin scipy seaborn matplotlib</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Files needed to use the default examples in this notebook</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># !wget https://raw.githubusercontent.com/aflip/biostats-with-python/main/data/age-bmi-sbp-data.csv</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># !wget https://raw.githubusercontent.com/aflip/biostats-with-python/main/data/paired-t-test-data.csv</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># !wget https://raw.githubusercontent.com/aflip/biostats-with-python/main/data/mann-whitney-eva-data.csv</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># !wget https://raw.githubusercontent.com/aflip/biostats-with-python/main/data/paired-t-bp.csv</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tests-by-variable-type" class="level2">
+<h2 class="anchored" data-anchor-id="tests-by-variable-type">Tests by variable type</h2>
+<ul>
+<li>Categorical vs categorical
+<ul>
+<li><a href="#chi-squared">Chi Squared</a></li>
+</ul></li>
+<li>Categorical vs continuous
+<ul>
+<li><a href="#wilcoxon–mann–whitney-wilcoxon-rank-sum-test">Wilcoxon-Mann-Whitney</a> (Independent groups)</li>
+<li><a href="#wilcoxon-signed-rank-test">Wilcoxon Signed Rank</a> (Related or paired groups)</li>
+<li><a href="#independent-t-test">Independent t-test</a></li>
+<li><a href="#paired-t-test">Paired t-test</a></li>
+<li><a href="#ancova">Ancova</a></li>
+<li><a href="#anova">Anova</a></li>
+</ul></li>
+<li>Continuous vs continuous
+<ul>
+<li><a href="#pearson">Pearson’s R</a></li>
+<li><a href="#spearmans-rank-correlation">Spearman’s Rank</a></li>
+<li><a href="#wilcoxon-signed-rank-test">Wilcoxon Signed Rank</a></li>
+<li><a href="#students-t-test-or-1-sample-t-test">Student’s t-test</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="non-parametric" class="level2">
+<h2 class="anchored" data-anchor-id="non-parametric">Non parametric</h2>
+<p>In the context of biomedical research and biostoatistics, Non parametric tests are those that do not make or need some assumptions about the population or distributions involved. Eg. The assumption of normality. At large sample sizes, the power of a non parametric test is the same as that of a parametric test. At smaller sample sizes, they allow us to consider hypothesis that the requirements for parametric tests would not allow. These also allow us to test categorical data.</p>
+<p>An alternative way to define non parametric tests is that the exact sampling distribution (t, chi etc.) can be obtained without requiring knowledge of the joint probability distribution of X and Y.</p>
+<section id="pearson" class="level3">
+<h3 class="anchored" data-anchor-id="pearson">Pearson</h3>
+<p>Type: Parametric</p>
+<p>Applied on: Continuous (interval or ratio) independent variable and continuous dependent variable.</p>
+<p>Talk: In this test we determine the strength of linear association between the outcome variable (<span class="math inline">x</span>) and independent predictor variable (<span class="math inline">y</span>). The test assumes a linear relationship.</p>
+<p>Range: <span class="math inline">-1 &lt;= r &lt;= 1</span></p>
+<p>A positive <span class="math inline">r</span> indicates a positive relationship (x increases as y increases) and if the two are not correlated the <span class="math inline">r</span> would be 0.</p>
+<p><span class="math inline">r = \frac{\Sigma(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\Sigma(x_i - \bar{x})^2\Sigma(y_i - \bar{y})^2}}</span></p>
+<p>The formula is covariance divided by the product of standard deviations, so it is essentially a normalized measurement of the covariance. As with covariance itself, the measure can only reflect a linear correlation of variables, and ignores and misfires for other types of relationships or correlations. This is <strong>important</strong> because if the relationship is non linear you may still get get a strong r but is meaningless.</p>
+<p>Significance values and confidence intervals can be calculated from an r using various methods.</p>
+<p>Always do a scatter plot, but do not conclude purely visually</p>
+<p>Null Hypothesis: <span class="math inline">h_0</span>: There is no correlation between the two</p>
+<p>Assumptions:</p>
+<ol type="1">
+<li>The variables are related linearly</li>
+</ol>
+<p>Non linear relationships can make interpreting r difficult. Here are some visual examples. from <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">wikipedia</a></p>
+<p><img src="non-linear-corr-wikipedia.png" class="img-fluid"></p>
+<p><strong>Interpretation</strong></p>
+<p>The interpretation depends on the scientific field. Because different standards apply. The original Coehn’s recommendations were</p>
+<ul>
+<li>r ≈ 0.10: small effect.</li>
+<li>r ≈ 0.30: moderate effect.</li>
+<li>r ≈ 0.50: large effect.</li>
+</ul>
+<p>Alternately:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>r</th>
+<th>Strength of correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.0 &gt; 0.1</td>
+<td>no correlation</td>
+</tr>
+<tr class="even">
+<td>0.1 &gt; 0.3</td>
+<td>weak correlation</td>
+</tr>
+<tr class="odd">
+<td>0.3 &gt; 0.5</td>
+<td>medium correlation</td>
+</tr>
+<tr class="even">
+<td>0.5 &gt; 0.7</td>
+<td>high correlation</td>
+</tr>
+<tr class="odd">
+<td>0.7 &gt; 1</td>
+<td>very high correlation</td>
+</tr>
+</tbody>
+</table>
+<p>Depending on the type of study, other tests like bootstrapped estimations, Fisher’s z calculation etc. might be needed</p>
+<p>Limitations:</p>
+<ul>
+<li>Correlation depends on the range of the data so that larger ranges lead to larger correlations. This can lead to vary strange interpretations</li>
+</ul>
+<p>Extra:</p>
+<p>Correlattion =/= Agreement. When measuring the correlation between two observations on the same phenomenon using different methods, it is important to differentiate correlation from agreement. eg. QC scores between different agents or spirometry vs peak flow meter. Since pearson’s is commonly used to compare different tests, it is good to be aware of this and measure them using other methods.</p>
+<p>Read more:</p>
+<ol type="1">
+<li><a href="https://hbiostat.org/bbr/corr">BBR: Correlations</a></li>
+<li><a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html">Meta Analysis in R: Effect Sizes</a></li>
+</ol>
+<p>Dataset:</p>
+<p>Hidaka T, Kasuga H, Endo S, Masuishi Y, Kakamu T, Takeda A, et al.&nbsp;Are lifestyle pattern changes associated to poor subjective sleep quality?: a cross-sectional study by gender among the general Japanese population underwent specified medical checkups in 2014 and 2015. Zenodo; 2020.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"age-bmi-sbp-data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This dataset gives us blood pressures, fasting blood glucose hba1c, smoking status and other information about a sample population. This is derived from the dataset linked above, and only contains values taken at baseline, in 2014. What we will do here is to investigate the baseline correlations.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">2014Age</th>
+<th data-quarto-table-cell-role="th">2014BMI</th>
+<th data-quarto-table-cell-role="th">2014SBP</th>
+<th data-quarto-table-cell-role="th">2014DBP</th>
+<th data-quarto-table-cell-role="th">2014FPG</th>
+<th data-quarto-table-cell-role="th">2014HbA1c</th>
+<th data-quarto-table-cell-role="th">2014smoking</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>3</td>
+<td>1</td>
+<td>64</td>
+<td>24.2</td>
+<td>170</td>
+<td>90</td>
+<td>138.0</td>
+<td>6.0</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>9</td>
+<td>1</td>
+<td>72</td>
+<td>21.4</td>
+<td>110</td>
+<td>64</td>
+<td>95.0</td>
+<td>5.4</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>14</td>
+<td>1</td>
+<td>63</td>
+<td>23.5</td>
+<td>116</td>
+<td>70</td>
+<td>94.0</td>
+<td>5.3</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>16</td>
+<td>1</td>
+<td>66</td>
+<td>24.3</td>
+<td>105</td>
+<td>74</td>
+<td>103.0</td>
+<td>5.4</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>18</td>
+<td>1</td>
+<td>72</td>
+<td>25.7</td>
+<td>130</td>
+<td>70</td>
+<td>101.0</td>
+<td>5.7</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>When the dataset is small and well structured, this is a good way to get an overall picture.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>sns.set_palette(<span class="st">"Set2"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.PairGrid(df[[<span class="st">"2014BMI"</span>, <span class="st">"2014SBP"</span>, <span class="st">"2014DBP"</span>, <span class="st">"2014FPG"</span>, <span class="st">"2014HbA1c"</span>]])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>g.map_diag(sns.histplot, kde<span class="op">=</span><span class="va">True</span>)  <span class="co"># sets what will be the diagonal</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>g.map_offdiag(sns.scatterplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Visually, the 2014HbA1c seems correlated with the 2014FPG, the distribution of BMI appears normal. What else?</p>
+<p>Let’s see if the blood pressure and BMI are correlated</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>stats.pearsonr(x<span class="op">=</span>df[<span class="st">"2014SBP"</span>], y<span class="op">=</span>df[<span class="st">"2014BMI"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>PearsonRResult(statistic=0.2075587788303957, pvalue=0.0)</code></pre>
+</div>
+</div>
+<p>A correlation of 0.2 is seen, which means there is a weak positive correlation between the two. In Python, if the p value is very small, the p value shows up as 0.0.<br>
+For practical purposes this can be reported as p &lt;0.0000001</p>
+<p>Exercise: Which variables do you think would be positively correlated? Draw histograms and do correlations to see if true.</p>
+<p>Pandas allows us to run correlations on the entire dataset and with seaborn we could plot the whole thing as a heatmap</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.corr()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">2014Age</th>
+<th data-quarto-table-cell-role="th">2014BMI</th>
+<th data-quarto-table-cell-role="th">2014SBP</th>
+<th data-quarto-table-cell-role="th">2014DBP</th>
+<th data-quarto-table-cell-role="th">2014FPG</th>
+<th data-quarto-table-cell-role="th">2014HbA1c</th>
+<th data-quarto-table-cell-role="th">2014smoking</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">id</td>
+<td>1.000000</td>
+<td>-0.107238</td>
+<td>-0.140646</td>
+<td>0.066077</td>
+<td>0.025006</td>
+<td>0.056320</td>
+<td>0.093893</td>
+<td>-0.037453</td>
+<td>-0.045123</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">gender</td>
+<td>-0.107238</td>
+<td>1.000000</td>
+<td>-0.026324</td>
+<td>-0.144869</td>
+<td>-0.110618</td>
+<td>-0.158681</td>
+<td>-0.189004</td>
+<td>-0.038417</td>
+<td>0.265688</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2014Age</td>
+<td>-0.140646</td>
+<td>-0.026324</td>
+<td>1.000000</td>
+<td>-0.011325</td>
+<td>0.182881</td>
+<td>-0.016351</td>
+<td>0.093073</td>
+<td>0.123198</td>
+<td>0.124332</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2014BMI</td>
+<td>0.066077</td>
+<td>-0.144869</td>
+<td>-0.011325</td>
+<td>1.000000</td>
+<td>0.207559</td>
+<td>0.202590</td>
+<td>0.210351</td>
+<td>0.198723</td>
+<td>0.023227</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2014SBP</td>
+<td>0.025006</td>
+<td>-0.110618</td>
+<td>0.182881</td>
+<td>0.207559</td>
+<td>1.000000</td>
+<td>0.648800</td>
+<td>0.163331</td>
+<td>0.076390</td>
+<td>0.021739</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2014DBP</td>
+<td>0.056320</td>
+<td>-0.158681</td>
+<td>-0.016351</td>
+<td>0.202590</td>
+<td>0.648800</td>
+<td>1.000000</td>
+<td>0.085319</td>
+<td>0.005988</td>
+<td>-0.002997</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2014FPG</td>
+<td>0.093893</td>
+<td>-0.189004</td>
+<td>0.093073</td>
+<td>0.210351</td>
+<td>0.163331</td>
+<td>0.085319</td>
+<td>1.000000</td>
+<td>0.723343</td>
+<td>-0.022481</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2014HbA1c</td>
+<td>-0.037453</td>
+<td>-0.038417</td>
+<td>0.123198</td>
+<td>0.198723</td>
+<td>0.076390</td>
+<td>0.005988</td>
+<td>0.723343</td>
+<td>1.000000</td>
+<td>0.005497</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2014smoking</td>
+<td>-0.045123</td>
+<td>0.265688</td>
+<td>0.124332</td>
+<td>0.023227</td>
+<td>0.021739</td>
+<td>-0.002997</td>
+<td>-0.022481</td>
+<td>0.005497</td>
+<td>1.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df.corr(), annot<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>&lt;Axes: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-10-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>A strong positive correlation between FPG and hba1c and sbp and dbp are seen. Everything else has lower correlations, but there is a positive correlation between BMI and HbA1c as we expect.</p>
+</section>
+<section id="spearmans-rank-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="spearmans-rank-correlation">Spearman’s rank correlation</h3>
+<p>Type: Non parametric ranking correlation test</p>
+<p>Applied on: Ordinal independent variable and an ordinal dependent variable.</p>
+<p>Talk:</p>
+<p>Spearman’s <span class="math inline">\rho</span> (sometimes labeled <span class="math inline">r_s</span>) assumes a monotonic relationship between <span class="math inline">X</span> and <span class="math inline">Y</span> , not a linear (as opposed to pearson’s <span class="math inline">r</span>)</p>
+<p>A monotonic relationship is where</p>
+<ol type="1">
+<li>When X increases, Y always increases, or always decreases or stays flat.</li>
+<li>The rate at which an increase or decrease occurs does not have to be the same for both variables.</li>
+<li>The relationship could be linear or non linear.</li>
+</ol>
+<p>$h_0: $ There is no correlation between the two variables <span class="math inline">\rho=0</span></p>
+<p>From this a t statistic can be calculated, and the p values can be computed.</p>
+<p><span class="math inline">t = \frac{\rho\sqrt{n-2}}{\sqrt{1-\rho^{2}}}</span></p>
+<p>Read more:</p>
+<ol type="1">
+<li><a href="https://hbiostat.org/bbr/corr#spearmans-rank-correlation">BBR:Spearman’s Correlation</a></li>
+<li><a href="https://stats.stackexchange.com/questions/415131/minimum-sample-size-for-spearmans-correlation-and-kendalls-tau-b">Stack Exchange: Spearman’s and Kendall Tau</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient">Wikipedia</a></li>
+</ol>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First, modelling with a random generated dataset</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>age <span class="op">=</span> []</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10000</span>):</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    age.append(random.randint(<span class="dv">18</span>, <span class="dv">100</span>))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>smoking <span class="op">=</span> []</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10000</span>):</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    smoking.append(random.randint(<span class="dv">0</span>, <span class="dv">4</span>))</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># smoking ranks :</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 0= Never smoked,</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 = used to smoke,</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2 = smoke less than a pack a day ,</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 = smoking a pack a day,</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 = smoking more than a pack a day</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>df_random <span class="op">=</span> pd.DataFrame({<span class="st">"age"</span>: age, <span class="st">"smoking"</span>: smoking})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>stats.normaltest(df_random[<span class="st">"age"</span>])  <span class="co"># not a normal dist</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>NormaltestResult(statistic=8448.011390155185, pvalue=0.0)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> df_random[<span class="st">"age"</span>]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> df_random[<span class="st">"smoking"</span>]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>coef, p <span class="op">=</span> stats.spearmanr(data1, data2)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>coef, p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>(-0.00621671431731578, 0.5342051023681593)</code></pre>
+</div>
+</div>
+<p>Spearmans correlation coefficient: -0.01309</p>
+<p>p=0.1905 &gt; alpha</p>
+<p>Samples are uncorrelated (fail to reject <span class="math inline">h_0</span>)</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Real World dataset</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"age-bmi-sbp-data.csv"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">2014Age</th>
+<th data-quarto-table-cell-role="th">2014BMI</th>
+<th data-quarto-table-cell-role="th">2014SBP</th>
+<th data-quarto-table-cell-role="th">2014DBP</th>
+<th data-quarto-table-cell-role="th">2014FPG</th>
+<th data-quarto-table-cell-role="th">2014HbA1c</th>
+<th data-quarto-table-cell-role="th">2014smoking</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>3</td>
+<td>1</td>
+<td>64</td>
+<td>24.2</td>
+<td>170</td>
+<td>90</td>
+<td>138.0</td>
+<td>6.0</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>9</td>
+<td>1</td>
+<td>72</td>
+<td>21.4</td>
+<td>110</td>
+<td>64</td>
+<td>95.0</td>
+<td>5.4</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>14</td>
+<td>1</td>
+<td>63</td>
+<td>23.5</td>
+<td>116</td>
+<td>70</td>
+<td>94.0</td>
+<td>5.3</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>16</td>
+<td>1</td>
+<td>66</td>
+<td>24.3</td>
+<td>105</td>
+<td>74</td>
+<td>103.0</td>
+<td>5.4</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>18</td>
+<td>1</td>
+<td>72</td>
+<td>25.7</td>
+<td>130</td>
+<td>70</td>
+<td>101.0</td>
+<td>5.7</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> df[<span class="st">"2014Age"</span>][:<span class="dv">5000</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> df[<span class="st">"2014smoking"</span>][:<span class="dv">5000</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>coef, p <span class="op">=</span> stats.spearmanr(data1, data2)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>coef, p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>(0.13033529753985648, 2.1769251455759564e-20)</code></pre>
+</div>
+</div>
+<p>Spearmans correlation coefficient: -0.130</p>
+<p>p = 2.1769251455759564e-20 &lt;&lt; alpha</p>
+<p>Samples are correlated (reject <span class="math inline">h_0</span>)</p>
+</section>
+<section id="chi-squared" class="level3">
+<h3 class="anchored" data-anchor-id="chi-squared">Chi-Squared</h3>
+<p>Type: Non-parametric</p>
+<p>Applied to: Categorical independent variable and a categorical dependent variable</p>
+<p>Talk:</p>
+<p>Sometimes the variables you need to test for independence are both categorical. This test looks at if two or more categorical variables are related</p>
+<p>Eg. You gave subjects mushrooms and measured if they got high, or not. The test was done for two groups, one has had previous exposure to psychedelic drugs and the other did not. Now if you want to know if people got high irrespective of the previous exposure, this test comes in handy.</p>
+<p>But the test does not give us a way to verify a directional hypothesis. That is, chi-square value can not tell you <strong>what</strong> the relationship is between two variables, only that a relationship exists between the two variables. There is only a right tail on a chi-square distribution.</p>
+<p>The test computes the expected frequencies assuming that the two variables were not correlated, and then compares this with the observed frequencies in your sample. Correlation is run on this to get the chi statistic.</p>
+<p>Null Hypothesis:</p>
+<p><span class="math inline">h_0</span>: There is no relationship between x and y. <span class="math inline">\space\chi^2 = 0</span></p>
+<p>Assumptions:</p>
+<ol type="1">
+<li>The total number of samples is greater than 13, otherwise exact tests (such as Barnard’s Exact test) should be used</li>
+<li>There are at least 5 observations <strong>expected</strong> per category (with low <span class="math inline">n</span>, <span class="math inline">\space\chi^2</span> will miss existing relationships)</li>
+<li>The sum of the observed ( <span class="math inline">o_e</span>) and expected frequencies ( <span class="math inline">f_e</span>) must be the same</li>
+</ol>
+<p>Limitations:</p>
+<ol type="1">
+<li><p>Heavily influenced by n.&nbsp;As n increases, chi-square increases, independent of the relationship between x and y. At large numbers you will likely find statistically significant relationships when in reality there is no relationship (False Positives). With small numbers might not find statistically significant relationships even if they exist (False Negatives).</p></li>
+<li><p>Sensitive to small expected frequencies. If <span class="math inline">f_e&lt;5</span> in 1 or more cells, chi-square is unreliable.</p></li>
+</ol>
+<p>Read More: <a href="https://web.archive.org/web/20171022032306/http://vassarstats.net/textbook/ch8pt1.html">Robert Lowry Chi-Square Procedures for the Analysis of Categorical Frequency Data</a></p>
+<p>Extra:</p>
+<p>This test can be used to</p>
+<ol type="1">
+<li>Evaluate the quality of a categorical variable in a classification problem</li>
+<li>Check the similarity between two categorical variables.</li>
+</ol>
+<ul>
+<li>A good categorical predictor and the class column should present high <span class="math inline">\space\chi^2</span> and low p-value.</li>
+<li>Dissimilar categorical variables should present high <span class="math inline">\space\chi^2</span> and low p-value.</li>
+</ul>
+<p>From <a href="https://pingouin-stats.org/build/html/generated/pingouin.chi2_independence.html#pingouin.chi2_independence">Pingouin Docs</a></p>
+<p>In scipy, the path to getting the relevent info is a bit circuitous, but can be accessed via <code>scipy.stats.chisquare</code>, Here I am using <code>Pingouin</code> instead</p>
+<div class="cell" data-outputid="7ff0d872-0e21-48d7-bffc-d36406496b4a" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pg.read_dataset(<span class="st">"chi2_independence"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th">cp</th>
+<th data-quarto-table-cell-role="th">trestbps</th>
+<th data-quarto-table-cell-role="th">chol</th>
+<th data-quarto-table-cell-role="th">fbs</th>
+<th data-quarto-table-cell-role="th">restecg</th>
+<th data-quarto-table-cell-role="th">thalach</th>
+<th data-quarto-table-cell-role="th">exang</th>
+<th data-quarto-table-cell-role="th">oldpeak</th>
+<th data-quarto-table-cell-role="th">slope</th>
+<th data-quarto-table-cell-role="th">ca</th>
+<th data-quarto-table-cell-role="th">thal</th>
+<th data-quarto-table-cell-role="th">target</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>63</td>
+<td>1</td>
+<td>3</td>
+<td>145</td>
+<td>233</td>
+<td>1</td>
+<td>0</td>
+<td>150</td>
+<td>0</td>
+<td>2.3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>37</td>
+<td>1</td>
+<td>2</td>
+<td>130</td>
+<td>250</td>
+<td>0</td>
+<td>1</td>
+<td>187</td>
+<td>0</td>
+<td>3.5</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>41</td>
+<td>0</td>
+<td>1</td>
+<td>130</td>
+<td>204</td>
+<td>0</td>
+<td>0</td>
+<td>172</td>
+<td>0</td>
+<td>1.4</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>56</td>
+<td>1</td>
+<td>1</td>
+<td>120</td>
+<td>236</td>
+<td>0</td>
+<td>1</td>
+<td>178</td>
+<td>0</td>
+<td>0.8</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>57</td>
+<td>0</td>
+<td>0</td>
+<td>120</td>
+<td>354</td>
+<td>0</td>
+<td>1</td>
+<td>163</td>
+<td>1</td>
+<td>0.6</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-outputid="ccc3994a-dfdd-4457-cd3e-7e2d98c6f6c3" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>data.target.value_counts()  <span class="co"># in this dataset, `target` is the presense and absence of cardiovascular disease, expressed as a category.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>target
+1    165
+0    138
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>data.sex.value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>sex
+1    207
+0     96
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<p>Let’s say our hypothesis is that gender and the target are interacting or have some correlation.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>expected, observed, stats <span class="op">=</span> pg.chi2_independence(data, x<span class="op">=</span><span class="st">"sex"</span>, y<span class="op">=</span><span class="st">"target"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If gender and heart disease status were un correlated we would see these frequencies.</p>
+<p><a href="https://web.archive.org/web/20171022032306/http://vassarstats.net/textbook/ch8pt1.html">Robert Lowry Chi-Square Procedures</a> Provides the method this is calculated in detail.</p>
+<div class="cell" data-outputid="799c71fa-2c56-4694-81c5-74a07408bb5e" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>expected  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">target</th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>43.722772</td>
+<td>52.277228</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>94.277228</td>
+<td>112.722772</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-outputid="65b0b48d-ebc8-45f3-b23b-89b4521832f0" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>observed  <span class="co"># more male cases seem to be having the target than expected</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">target</th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">sex</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>24.5</td>
+<td>71.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>113.5</td>
+<td>93.5</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fl">43.722</span> <span class="op">+</span> <span class="fl">52.277</span> <span class="op">+</span> <span class="fl">94.277228</span> <span class="op">+</span> <span class="fl">112.722772</span>  <span class="co"># sum exp</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>302.999</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fl">24.5</span> <span class="op">+</span> <span class="fl">71.5</span> <span class="op">+</span> <span class="fl">113.5</span> <span class="op">+</span> <span class="fl">93.5</span>  <span class="co"># sum obs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>303.0</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="893ae843-f908-4694-88b0-13e9fec5f8ff" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>stats  <span class="co"># the p values are all very low, with great power (comes great responsibility).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">test</th>
+<th data-quarto-table-cell-role="th">lambda</th>
+<th data-quarto-table-cell-role="th">chi2</th>
+<th data-quarto-table-cell-role="th">dof</th>
+<th data-quarto-table-cell-role="th">pval</th>
+<th data-quarto-table-cell-role="th">cramer</th>
+<th data-quarto-table-cell-role="th">power</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>pearson</td>
+<td>1.000000</td>
+<td>22.717227</td>
+<td>1.0</td>
+<td>1.876778e-06</td>
+<td>0.273814</td>
+<td>0.997494</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>cressie-read</td>
+<td>0.666667</td>
+<td>22.931427</td>
+<td>1.0</td>
+<td>1.678845e-06</td>
+<td>0.275102</td>
+<td>0.997663</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>log-likelihood</td>
+<td>0.000000</td>
+<td>23.557374</td>
+<td>1.0</td>
+<td>1.212439e-06</td>
+<td>0.278832</td>
+<td>0.998096</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>freeman-tukey</td>
+<td>-0.500000</td>
+<td>24.219622</td>
+<td>1.0</td>
+<td>8.595211e-07</td>
+<td>0.282724</td>
+<td>0.998469</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>mod-log-likelihood</td>
+<td>-1.000000</td>
+<td>25.071078</td>
+<td>1.0</td>
+<td>5.525544e-07</td>
+<td>0.287651</td>
+<td>0.998845</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>neyman</td>
+<td>-2.000000</td>
+<td>27.457956</td>
+<td>1.0</td>
+<td>1.605471e-07</td>
+<td>0.301032</td>
+<td>0.999481</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Given that p &lt; alpha, we reject the null hypothesis that gender and heart disease are uncorrelated. Gender is a good predictor.</p>
+<p><span class="math inline">\chi^2</span> tests also have critical values, which can be looked up in a table online. But if the p vaues are all &lt; alpha <span class="math inline">\chi^2</span> will be more than the critical values. So we can reject the <span class="math inline">h_0</span> that there is no relationship between the variables</p>
+</section>
+<section id="wilcoxonmannwhitney-wilcoxon-rank-sum-test" class="level3">
+<h3 class="anchored" data-anchor-id="wilcoxonmannwhitney-wilcoxon-rank-sum-test">Wilcoxon–Mann–Whitney (Wilcoxon rank-sum test)</h3>
+<p>Type: Non parametric</p>
+<p>Applied on: Two categorical (ordinal/nominal) independent variables and a continuous dependant variable.</p>
+<p>Talk: Let’s say you have two conditions under which some observations were made (or two groups of people), and you would like to know if the observations suggest a difference of some kind between the groups. If the observations were normally distributed, an independent t-test could be used. But in case they were not, we use a MWU.</p>
+<p>The test reports the probability that a randomly selected value from one group would be larger than a randomly selected one from the second group. This is best reported as concordance probability.</p>
+<p>Null hypothesis:</p>
+<p><span class="math inline">h_0</span> : The distribution underlying sample x is the same as the distribution underlying sample y.</p>
+<p>Assumptions:</p>
+<ul>
+<li>All the observations from both groups are independent of each other,</li>
+<li>The responses are ordinal or ratio</li>
+</ul>
+<p>Read More:</p>
+<ol type="1">
+<li><a href="https://stats.stackexchange.com/questions/121852/how-to-choose-between-t-test-or-non-parametric-test-e-g-wilcoxon-in-small-sampl">stats.stackexchange: How to choose between t-test or non-parametric</a></li>
+<li><a href="https://hbiostat.org/bbr/nonpar#two-sample-test-wilcoxonmannwhitney">BBR: Wilcox Mann Whitney</a></li>
+</ol>
+<p>The dataset used below is from table 15.1 Discovering Statistics Using R by Andy Field, Jeremy Miles, Zoë Field</p>
+<p>In this dataset, a psychiatrist studies the effect of some drugs on mood.</p>
+<ul>
+<li>They study 20 participants</li>
+<li>10 were given an ecstasy tablet to take on a Saturday night (day 0) and</li>
+<li>10 were allowed to drink only alcohol.</li>
+<li>Levels of depression were measured for both groups using the Beck Depression Inventory (BDI) on day 1 and day 4.</li>
+</ul>
+<p>We would like to know if there is any statistically difference in the BDI scores on day 1 and day 3, split across the two groups. eg. Did Ecstacy make mood worse or better?</p>
+<p>our <span class="math inline">h_0</span> is that there is no difference between the two groups on day 3 or day 1</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mann-whitney-eva-data.csv"</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="5eb925b2-0d0e-4d94-bde6-7e3538c14633" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Participant</th>
+<th data-quarto-table-cell-role="th">Drug</th>
+<th data-quarto-table-cell-role="th">BDI_Sunday</th>
+<th data-quarto-table-cell-role="th">BDI_Wednesday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>Ecstasy</td>
+<td>15</td>
+<td>28</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>Ecstasy</td>
+<td>35</td>
+<td>35</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>Ecstasy</td>
+<td>16</td>
+<td>35</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>Ecstasy</td>
+<td>18</td>
+<td>24</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>Ecstasy</td>
+<td>19</td>
+<td>39</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-outputid="02e86f3a-0549-4445-a121-5d35972f617d" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>stats.probplot(</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"BDI_Sunday"</span>], dist<span class="op">=</span><span class="st">"norm"</span>, plot<span class="op">=</span>plt</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span>  <span class="co"># the colon skips printing the data</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># this is ~ a q-q plot and there are outliers</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Todo why this plot and what's a better plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-outputid="30f2c913-4c90-4799-c0f1-b7c524eedd1a" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>x_s <span class="op">=</span> df[df[<span class="st">"Drug"</span>] <span class="op">==</span> <span class="st">"Ecstasy"</span>][<span class="st">"BDI_Sunday"</span>]</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>y_s <span class="op">=</span> df[df[<span class="st">"Drug"</span>] <span class="op">==</span> <span class="st">"Alcohol"</span>][<span class="st">"BDI_Sunday"</span>]</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>stats.mannwhitneyu(x_s, y_s)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co"># the differences on BDI sunday are not significant.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>MannwhitneyuResult(statistic=64.5, pvalue=0.28608212723292936)</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="7f46b448-dc37-4a3b-b96d-b65577442bc4" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>pg.mwu(x_s, y_s)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># P value &gt; Alpha. Accept the null hypothesis, the distributions are identical on day 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">U-val</th>
+<th data-quarto-table-cell-role="th">alternative</th>
+<th data-quarto-table-cell-role="th">p-val</th>
+<th data-quarto-table-cell-role="th">RBC</th>
+<th data-quarto-table-cell-role="th">CLES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">MWU</td>
+<td>64.5</td>
+<td>two-sided</td>
+<td>0.286082</td>
+<td>-0.29</td>
+<td>0.645</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-outputid="91daaab1-79a5-47e8-a199-87f43830d28c" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>x_w <span class="op">=</span> df[df[<span class="st">"Drug"</span>] <span class="op">==</span> <span class="st">"Ecstasy"</span>][<span class="st">"BDI_Wednesday"</span>]</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>y_w <span class="op">=</span> df[df[<span class="st">"Drug"</span>] <span class="op">==</span> <span class="st">"Alcohol"</span>][<span class="st">"BDI_Wednesday"</span>]</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>stats.mannwhitneyu(x_w, y_w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>MannwhitneyuResult(statistic=96.0, pvalue=0.0005690342182204761)</code></pre>
+</div>
+</div>
+<p>p-value &lt; alpha, reject the null hypothesis, the sample differs on day 4.</p>
+<p>In addition to the U statistic, it is useful and better to report the concordance probability (also known as probability index)</p>
+<p><span class="math inline">c = U_1 /(n_1 * n_2)</span></p>
+<p>96.0/(10*10) = 0.96</p>
+<p>Effect size:</p>
+<p>If you use scipy, effect size needs to be calculated manually, if you use pingouin, the RBC (ranked biserial correlation) and the common language effect size (CLES) will give you this information.</p>
+<p>Manually calculating the effect size.</p>
+<p>from z score: <span class="math inline">r = z/sqrt(N)</span></p>
+<p>from U statistic : <span class="math inline">r= 1- (2U/n_1*n_2)</span></p>
+</section>
+<section id="wilcoxon-signed-rank-test" class="level3">
+<h3 class="anchored" data-anchor-id="wilcoxon-signed-rank-test">Wilcoxon signed-rank test</h3>
+<p>Type: Non-parametric</p>
+<p>Applied on: Continuous dependent variable and categorical independent variable</p>
+<p>Let’s say you have two measurements taken from the same individual, object, or related units and the data are not normal. If your data were normal, you could use the paired t-test to compare them. IN cases where the sample is not normal, we use the WSR test. It tests whether the distribution of the differences x - y is symmetric about zero.</p>
+<p>eg.</p>
+<ul>
+<li>A measurement taken at two different times (e.g., pre-test and post-test score with an intervention administered between the two time points)</li>
+<li>A measurement taken under two different conditions (e.g., completing a test under a “control” condition and an “experimental” condition)</li>
+<li>Measurements taken from two halves or sides of a subject or experimental unit (e.g., measuring hearing loss in a subject’s left and right ears).</li>
+</ul>
+<p>The procedure of the test subtracts x from y and assigns signed ranks (-1, -2, +9 etc). If the measurements are from the same individual with no effect, you expect the ranks to be more or less the same.</p>
+<p>A z value can be calculated from this by <span class="math inline">z = \frac{\sum{SR_{i}}}{\sqrt{\sum{SR_{i}^{2}}}}</span></p>
+<p>and a p value can be looked up in a normal distribution <code>stats.norm.cdf(z)</code></p>
+<p>Null Hypothesis: <span class="math inline">h_0</span>: There is no difference in the ranks, the two paired samples come from the same distribution</p>
+<p>Assumptions:</p>
+<ol type="1">
+<li>Random sampling from a defined population</li>
+<li>Interval or ratio scale of measurement (continuous data)</li>
+<li>Independent variable is two categorical, “related groups” or “matched pairs”</li>
+</ol>
+<p>Read More: 1. <a href="https://hbiostat.org/bbr/nonpar.html#one-sample-test-wilcoxon-signed-rank">BBR: One sample test</a> 2. <a href="https://sphweb.bumc.bu.edu/otlt/mph-modules/bs/bs704_nonparametric/BS704_Nonparametric6.html">Boston University: Non Parametric tests</a></p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"paired-t-test-data.csv"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">BDI_Sunday</th>
+<th data-quarto-table-cell-role="th">BDI_Wednesday</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>28</td>
+<td>29</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>19</td>
+<td>28</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>30</td>
+<td>33</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>21</td>
+<td>25</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>19</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>In scipy When y is provided, wilcoxon calculates the test statistic based on the ranks of the absolute values of d = x - y. Roundoff error in the subtraction can result in elements of d being assigned different ranks even when they would be tied with exact arithmetic. Rather than passing x and y separately, always pass the difference x - y, rounding as needed to ensure that only truly unique elements are numerically distinct, and passing the result as x with no y.</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"BDI_diff"</span>] <span class="op">=</span> df.BDI_Sunday <span class="op">-</span> df.BDI_Wednesday</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">BDI_Sunday</th>
+<th data-quarto-table-cell-role="th">BDI_Wednesday</th>
+<th data-quarto-table-cell-role="th">BDI_diff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>28</td>
+<td>29</td>
+<td>-1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>19</td>
+<td>28</td>
+<td>-9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>30</td>
+<td>33</td>
+<td>-3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>21</td>
+<td>25</td>
+<td>-4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>19</td>
+<td>32</td>
+<td>-13</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>stats.wilcoxon(df[<span class="st">"BDI_diff"</span>])</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># p &lt; alpha, reject the null hypothesis that the two are from same distribution</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>WilcoxonResult(statistic=348.0, pvalue=7.110924467959148e-13)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> df.BDI_diff.<span class="bu">sum</span>() <span class="op">/</span> sqrt(<span class="bu">sum</span>(df.BDI_diff <span class="op">*</span> df.BDI_diff))</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>-7.045084942753576</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> stats.norm.cdf(<span class="bu">abs</span>(z)))</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>1.8534063173092363e-12</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="parametric" class="level2">
+<h2 class="anchored" data-anchor-id="parametric">Parametric</h2>
+<section id="independent-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="independent-t-test">Independent T-test</h3>
+<p>Type: Parametric</p>
+<p>Applied to: Two <strong>independent</strong> categorical variables and one continuous dependant variable.</p>
+<p>Talk:</p>
+<p>This test is used when there are two experimental conditions and different participants were assigned to each condition, but the outcome variable is the same. Let’s say we test the effect of a drug that reduced heart rates. One group you gave this to is powerlifters, the other group is badminton player. You measure the baseline heart rate and the difference from baseline at hour 2. So does this drug lower heart rate in powerlifters more than badminton players? A statistical measure of this is the mean value. And so we are looking at the quantity of interest or <span class="math inline">QOI = \mu_{1}-\mu_{2}</span></p>
+<p>The calculation is <span class="math inline">t = \frac{\mathrm{point~estimate~of~QOI}}{\mathrm{se~of~numerator}}</span></p>
+<p>Null hypothesis:</p>
+<p><span class="math inline">H_{0}: \mu_{1}=\mu_{2}</span></p>
+<p>The two samples are from the same population / the drug has no effect / there is no mean diff in the populations</p>
+<p>Assumptons:</p>
+<ol type="1">
+<li>The sampling distribution is normally distributed.</li>
+<li>Data are interval or ratio</li>
+<li>Scores in different treatment conditions are independent (because they come from different people)</li>
+<li>Homogeneity of variance – in theory we assume equal variances, but in reality we don’t</li>
+</ol>
+<p>Read More:</p>
+<ol type="1">
+<li><a href="https://hbiostat.org/bbr/htest#two-sample-test-for-means">BBR: Two sample T-test</a></li>
+</ol>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co"># as a test, I am generating a random distribution here.</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>mean_1, sd_1 <span class="op">=</span> <span class="dv">120</span>, <span class="dv">1</span>  <span class="co"># mean and standard deviation</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>μ, σ <span class="op">=</span> <span class="dv">85</span>, <span class="dv">1</span>  <span class="co"># standard notation</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.random.default_rng().normal(mean_1, sd_1, <span class="dv">10000</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> np.random.default_rng().normal(μ, σ, <span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To manually test if the data are normal</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co"># abs(mean_1 - np.mean(s))</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># abs(sd_1 - np.std(s, ddof=1))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>sns.histplot(s)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>sns.histplot(n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>&lt;Axes: ylabel='Count'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-39-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>stats.probplot(n, dist<span class="op">=</span><span class="st">"norm"</span>, plot<span class="op">=</span>plt)<span class="op">;</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co"># The data is pretty uniformly distributed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-40-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> stats.ttest_ind(s, n)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>TtestResult(statistic=2486.1432755104966, pvalue=0.0, df=19998.0)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>res.confidence_interval(confidence_level<span class="op">=</span><span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>ConfidenceInterval(low=34.98009656277974, high=35.03529690340728)</code></pre>
+</div>
+</div>
+<p>For interpreting the result, we look at the p value, if it is less than the alpha, we reject the null hypothesis.</p>
+<p>If you want to calculate the effect size, use earlier methods, or use pg, it gives the cohen-d</p>
+<p>given that we used a random number generator to ensure that these are infact independent, the result is not a surprise.</p>
+<div class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># power = 1- (2*mean)/n1*n2</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> ((<span class="dv">2</span> <span class="op">*</span> <span class="op">-</span><span class="fl">138.48151</span>) <span class="op">/</span> (<span class="dv">1000</span> <span class="op">*</span> <span class="dv">1000</span>))</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>r  <span class="co"># this will be the same as power</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+<pre><code>1.00027696302</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>pg.ttest(s, n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/darthfader/miniforge3/envs/MS-baby-311/lib/python3.11/site-packages/pingouin/bayesian.py:152: RuntimeWarning: divide by zero encountered in scalar divide
+  bf10 = 1 / ((1 + t**2 / df) ** (-(df + 1) / 2) / integr)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">T</th>
+<th data-quarto-table-cell-role="th">dof</th>
+<th data-quarto-table-cell-role="th">alternative</th>
+<th data-quarto-table-cell-role="th">p-val</th>
+<th data-quarto-table-cell-role="th">CI95%</th>
+<th data-quarto-table-cell-role="th">cohen-d</th>
+<th data-quarto-table-cell-role="th">BF10</th>
+<th data-quarto-table-cell-role="th">power</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">T-test</td>
+<td>2486.143276</td>
+<td>19998</td>
+<td>two-sided</td>
+<td>0.0</td>
+<td>[34.98, 35.04]</td>
+<td>35.159375</td>
+<td>inf</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="paired-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="paired-t-test">Paired T-test</h3>
+<p>Parametric.</p>
+<p>Applied to: Continuous Dependent variable and categorical independent variable</p>
+<p>We use a paired t-test when we have two measurements taken from the same individual, object, or related units under different conditions. A paired t-test checks if the mean change for these pairs is significantly different from zero. Let’s say we come up with a pill that makes working memory better for 10 minutes. Instead of cases and controls, we can estimate the relative effect of the pill on working memory by first testing memory at base line, and then administering the drug and retesting. Same test, done on the same individual, before and after an intervention.</p>
+<p>eg.</p>
+<ul>
+<li>A measurement taken at two different times (e.g., pre-test and post-test score with an intervention administered between the two time points)</li>
+<li>A measurement taken under two different conditions (e.g., completing a test under a “control” condition and an “experimental” condition)</li>
+<li>Measurements taken from two halves or sides of a subject or experimental unit (e.g., measuring hearing loss in a subject’s left and right ears).</li>
+</ul>
+<p>Also known as a paired sample t-test or a dependent samples t test. These names reflect the fact that the two samples are paired or dependent because they are of the same subjects.</p>
+<p>Procedure: we first subtract the pre-treatment value from the post-treatment value for each subject, this gives us the differences in the values. Then we compare these differences to zero.</p>
+<p><span class="math inline">t\ =\ \cfrac{\mu{_d}\ -\ 0}{\hat{\sigma}/\sqrt{n}}</span></p>
+<p>where <span class="math inline">\mu{_d}</span> is the sample mean of the differences, and <span class="math inline">\sigma</span> is the standard deviation of these differences.</p>
+<p>Remember that <span class="math inline">\sigma/\sqrt{n}</span> gives us the standard error of the mean</p>
+<p>Null Hypothesis:</p>
+<p><span class="math inline">h_0:\mu{_d}=0</span></p>
+<p>Assumptions:</p>
+<ol type="1">
+<li>Random sampling from a defined population</li>
+<li>Interval or ratio scale of measurement (continuous data)</li>
+<li>Population is normally distributed</li>
+</ol>
+<p>Read More: 1. <a href="https://www.statisticssolutions.com/free-resources/directory-of-statistical-analyses/paired-sample-t-test/">Directory of statistical Analysis</a> 2. <a href="https://libguides.library.kent.edu/spss/pairedsamplesttest">Kent State University: Paired T test</a></p>
+<div class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"paired_t_bp.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this dataset, we gave a drug to people and checked baseline mean BP and after 3 hours.</p>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 10000 entries, 0 to 9999
+Data columns (total 2 columns):
+ #   Column       Non-Null Count  Dtype  
+---  ------       --------------  -----  
+ 0   base_bp      10000 non-null  float64
+ 1   post_drg_bp  10000 non-null  float64
+dtypes: float64(2)
+memory usage: 156.4 KB</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>df.base_bp.hist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>&lt;Axes: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-47-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test if the data are normal</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(stats.normaltest(df[<span class="st">"base_bp"</span>]))</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(stats.normaltest(df[<span class="st">"post_drg_bp"</span>]))</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a><span class="co"># p &gt; alpha, data are  normal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NormaltestResult(statistic=1.4720610341243716, pvalue=0.47901157493967916)
+NormaltestResult(statistic=1.0681931715578785, pvalue=0.5861986311814571)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"base Mean:"</span>,</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">round</span>(df[<span class="st">"base_bp"</span>].mean()),</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"post drug Mean:"</span>,</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">round</span>(df[<span class="st">"post_drg_bp"</span>].mean()),</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Expected Mean Difference:"</span>,</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>,</span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Observed Mean Difference:"</span>,</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>    (df[<span class="st">"base_bp"</span>].mean() <span class="op">-</span> df[<span class="st">"post_drg_bp"</span>].mean()),</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>base Mean: 120 post drug Mean: 110 Expected Mean Difference: 0 Observed Mean Difference: 9.865290000000002</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>stats.ttest_rel(df[<span class="st">"base_bp"</span>], df[<span class="st">"post_drg_bp"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+<pre><code>TtestResult(statistic=85.77186477218346, pvalue=0.0, df=9999)</code></pre>
+</div>
+</div>
+<p>p &lt; alpha, reject null hypothesis that there is no mean difference. Whichever drug was used, it changes the mean bp</p>
+<p>The results are statistically significant. Our sample data support the notion that the average paired difference does not equal zero. Specifically, the post drug mean is lower than the basal mean.</p>
+<div class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>pg.ttest(df[<span class="st">"base_bp"</span>], df[<span class="st">"post_drg_bp"</span>], paired<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/darthfader/miniforge3/envs/MS-baby-311/lib/python3.11/site-packages/pingouin/bayesian.py:152: RuntimeWarning: divide by zero encountered in scalar divide
+  bf10 = 1 / ((1 + t**2 / df) ** (-(df + 1) / 2) / integr)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">T</th>
+<th data-quarto-table-cell-role="th">dof</th>
+<th data-quarto-table-cell-role="th">alternative</th>
+<th data-quarto-table-cell-role="th">p-val</th>
+<th data-quarto-table-cell-role="th">CI95%</th>
+<th data-quarto-table-cell-role="th">cohen-d</th>
+<th data-quarto-table-cell-role="th">BF10</th>
+<th data-quarto-table-cell-role="th">power</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">T-test</td>
+<td>85.771865</td>
+<td>9999</td>
+<td>two-sided</td>
+<td>0.0</td>
+<td>[9.64, 10.09]</td>
+<td>1.22507</td>
+<td>inf</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>bf10 uses a bayesian method to calculate the stat and can be ignored. the p is too small, this causes the error</p>
+</section>
+<section id="students-t-test-or-1-sample-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="students-t-test-or-1-sample-t-test">Student’s t-Test or 1-sample T-test</h3>
+<p>Type: Parametric</p>
+<p>Applied to: Continuous dependant variable, compared to the mean for the population (IV).</p>
+<p>Talk: If you would like to know if the sample observations are from the X population whose mean is <strong>known</strong>. Or, is there a difference between this group and the population.</p>
+<p>eg. We have measured the heights of 30 people in the office, and want to know if the average height in the office <span class="math inline">\hat x</span>, that matches the average heights of indians <span class="math inline">\mu_0</span>.</p>
+<p><span class="math inline">t_{calc} = \frac{\bar{x} - \mu_{0}}{se_{\hat x}}</span></p>
+<p>where <span class="math inline">{se_{\hat x}}</span> is the standard error of our observations <span class="math inline">{\hat x}</span></p>
+<p>After you get a t value, you need to look up the critical value from a table, for the corresponding degree of freedom, and if $t_{calc} &gt; t_{crit}$, we can reject the null hypothesis.</p>
+<p>One thing to remember in this test is that rejecting the null hypothesis is often the “bad” outcome in the student’s T</p>
+<p>Null Hypothesis:</p>
+<p>The <span class="math inline">h_0</span> is that <span class="math inline">\hat x = \mu_0</span></p>
+<p>Assumptions:</p>
+<ol type="1">
+<li>Random sampling from a defined population</li>
+<li>Interval or ratio scale of measurement</li>
+<li>Population is normally distributed</li>
+</ol>
+<p>Read More:</p>
+<ol type="1">
+<li><a href="https://hbiostat.org/bbr/htest.html#one-sample-test-for-mean">BBR: One sample test for Mean</a></li>
+<li><a href="https://www.statisticshowto.com/probability-and-statistics/hypothesis-testing/one-sample-t-test/#example">Statistics How to: 1 sample t-test</a></li>
+</ol>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng()</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Making a random dataset of 300 observations</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>height_1 <span class="op">=</span> rng.integers(<span class="dv">140</span>, <span class="dv">180</span>, <span class="dv">300</span>)  <span class="co"># samples integers uniformly</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>np.mean(height_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="53">
+<pre><code>160.35</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>POP_MEAN <span class="op">=</span> <span class="fl">158.5</span>  <span class="co"># from average heights of indians, wikipedia</span></span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="co"># perform one sample t-test</span></span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>stats.ttest_1samp(a<span class="op">=</span>height_1, popmean<span class="op">=</span>POP_MEAN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="54">
+<pre><code>TtestResult(statistic=2.74954487960015, pvalue=0.0063311279678636674, df=299)</code></pre>
+</div>
+</div>
+<p>p &gt; alpha, accept the null hypothesis</p>
+<p>meaning our sample mean is from the same population as the general Indian population</p>
+<div class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>pg.ttest(height_1, POP_MEAN)  <span class="co"># Gives us the power and the Cohen-D</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="55">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">T</th>
+<th data-quarto-table-cell-role="th">dof</th>
+<th data-quarto-table-cell-role="th">alternative</th>
+<th data-quarto-table-cell-role="th">p-val</th>
+<th data-quarto-table-cell-role="th">CI95%</th>
+<th data-quarto-table-cell-role="th">cohen-d</th>
+<th data-quarto-table-cell-role="th">BF10</th>
+<th data-quarto-table-cell-role="th">power</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">T-test</td>
+<td>2.749545</td>
+<td>299</td>
+<td>two-sided</td>
+<td>0.006331</td>
+<td>[159.03, 161.67]</td>
+<td>0.158745</td>
+<td>2.612</td>
+<td>0.782523</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>We redid the test at the Amsterdam office, and want to know if that has the same mean as the indian office.</p>
+<div class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>height_2 <span class="op">=</span> rng.integers(<span class="dv">168</span>, <span class="dv">195</span>, <span class="dv">300</span>)</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(height_2).hist(bins<span class="op">=</span><span class="dv">5</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-56-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>stats.ttest_1samp(a<span class="op">=</span>height_2, popmean<span class="op">=</span>POP_MEAN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="57">
+<pre><code>TtestResult(statistic=48.735063956440214, pvalue=2.747487708524111e-144, df=299)</code></pre>
+</div>
+</div>
+<p>p &lt; alpha. Reject the null hypothesis, our observed sample mean is not from the same population as India and our amsterdam office needs more diversity. Or taller tables.</p>
+</section>
+<section id="anova" class="level3">
+<h3 class="anchored" data-anchor-id="anova">Anova</h3>
+<p>Type: Parametric</p>
+<p>Applied to:</p>
+<ul>
+<li>DV = continuous</li>
+<li>IV = categorical with more than 2 categories, usually 3-6 categories, nominal or ordinal (It gets very confusing when there are more than 6)</li>
+</ul>
+<p>Rationale:</p>
+<p>In some studies we may want to look at how different groups of patients or subjects differ with regards to the dependant variable or the outcome. If there are just two such groups, we can use the student’s t-test. But if multiple groups are present, we use Anova.</p>
+<p>The groups may be in the same categorical variable, or in different categorical variables.</p>
+<p>Eg. The pain tolerance of people with 0, 3, 6 or 10 tattoos was measured. Now we want to know if besides the number of tattoos, the gender made any difference. In the first case we have one categorical variable, presense of tattoos, with four groups. IN the second case we have four groups in category one, and two groups in category two.</p>
+<p>Null hypothesis:</p>
+<p><span class="math inline">h_0</span>: There is no effect of the IV on the DV</p>
+<p>Assumptions for doing an anova</p>
+<ol type="1">
+<li>The groups should be independent (comparison is to be between groups, not within subjects)</li>
+<li>The data should be normally distributed, if small sample (&lt;30 observations per group), in larger samples this doesn’t matter so much. Normality should be checked for each category of the IV</li>
+<li>The groups should have equal variance (homoscedasticity). Check using box plots /stripplots or Levene Test and do a welch anova if unequal variance.</li>
+<li>There should not be any major outliers</li>
+</ol>
+<p>Note:</p>
+<p>When the ANOVA is significant, post hoc tests are used to see differences between specific groups. Post hoc tests control the family-wise error rate (inflated type I error rate) due to multiple comparisons. They adust the p values (Bonferroni correction) or critical value (Tukey’s HSD test).</p>
+<p>Read More: 1. <a href="https://people.uncw.edu/pricej/teaching/statistics/anova.htm">Jammie Price : Anova</a> 2. <a href="https://hbiostat.org/bbr/multgroup.html#two-way-anova">Biostatistics for research: Two Way anova</a> 3. <a href="http://www.biostathandbook.com/onewayanova.html">Handbook of Biological statistics: One Way Anova</a> 4. <a href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">Wikipedia: Multiple comparisons</a> 5. <a href="https://doi.org/10.21037/jtd.2017.05.34">Chen, S. Y et al.&nbsp;A general introduction to adjustment for multiple comparisons. Journal of thoracic disease, 9(6), 1725–1729</a></p>
+<div class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pg.read_dataset(<span class="st">"anova"</span>)  <span class="co"># built-in dataset in pingouin</span></span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a><span class="co"># In this dataset they tested people's pain threshold and tried to see if the hair color of the subject made any difference to the thresholds.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="59">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Subject</th>
+<th data-quarto-table-cell-role="th">Hair color</th>
+<th data-quarto-table-cell-role="th">Pain threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>Light Blond</td>
+<td>62</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>Light Blond</td>
+<td>60</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>Light Blond</td>
+<td>71</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>Light Blond</td>
+<td>55</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>Light Blond</td>
+<td>48</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>df.rename(</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>    columns<span class="op">=</span>{<span class="st">"Hair color"</span>: <span class="st">"hair_color"</span>, <span class="st">"Pain threshold"</span>: <span class="st">"pain_threshold"</span>},</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>    inplace<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Just to make it easier to index into</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Box plots are everywhere and some care must be taken in interpreting them: <a href="https://www.data-to-viz.com/caveat/boxplot.html">Read more</a></p>
+<div class="cell" data-execution_count="61">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>sns.boxplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"hair_color"</span>, y<span class="op">=</span><span class="st">"pain_threshold"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="61">
+<pre><code>&lt;Axes: xlabel='hair_color', ylabel='pain_threshold'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-61-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Visualizing the data helps us get a rough idea of the distribution. in this case the values are distributed evenly, but box plots confuse me so I recommend using strip plots or violin plots</p>
+<div class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="co">""" </span></span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a><span class="co">    This first plots a strip plot, then draws a line at the mean of each group, by plotting a box plot on top of the strip plot but then not showing the boxes. Sadly this is the easiest way to do this in python</span></span>
+<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb90-7"><a href="#cb90-7" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> sns.stripplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"hair_color"</span>, y<span class="op">=</span><span class="st">"pain_threshold"</span>)</span>
+<span id="cb90-8"><a href="#cb90-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-9"><a href="#cb90-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-10"><a href="#cb90-10" aria-hidden="true" tabindex="-1"></a>sns.boxplot(</span>
+<span id="cb90-11"><a href="#cb90-11" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
+<span id="cb90-12"><a href="#cb90-12" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"hair_color"</span>,</span>
+<span id="cb90-13"><a href="#cb90-13" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"pain_threshold"</span>,</span>
+<span id="cb90-14"><a href="#cb90-14" aria-hidden="true" tabindex="-1"></a>    showmeans<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb90-15"><a href="#cb90-15" aria-hidden="true" tabindex="-1"></a>    meanline<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb90-16"><a href="#cb90-16" aria-hidden="true" tabindex="-1"></a>    meanprops<span class="op">=</span>{<span class="st">"color"</span>: <span class="st">"k"</span>, <span class="st">"ls"</span>: <span class="st">"-"</span>, <span class="st">"lw"</span>: <span class="dv">2</span>},</span>
+<span id="cb90-17"><a href="#cb90-17" aria-hidden="true" tabindex="-1"></a>    medianprops<span class="op">=</span>{<span class="st">"visible"</span>: <span class="va">False</span>},</span>
+<span id="cb90-18"><a href="#cb90-18" aria-hidden="true" tabindex="-1"></a>    whiskerprops<span class="op">=</span>{<span class="st">"visible"</span>: <span class="va">False</span>},</span>
+<span id="cb90-19"><a href="#cb90-19" aria-hidden="true" tabindex="-1"></a>    zorder<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb90-20"><a href="#cb90-20" aria-hidden="true" tabindex="-1"></a>    showfliers<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb90-21"><a href="#cb90-21" aria-hidden="true" tabindex="-1"></a>    showbox<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb90-22"><a href="#cb90-22" aria-hidden="true" tabindex="-1"></a>    showcaps<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb90-23"><a href="#cb90-23" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>p,</span>
+<span id="cb90-24"><a href="#cb90-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb90-25"><a href="#cb90-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-62-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>sns.violinplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"hair_color"</span>, y<span class="op">=</span><span class="st">"pain_threshold"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="63">
+<pre><code>&lt;Axes: xlabel='hair_color', ylabel='pain_threshold'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-63-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>pg.normality(df, group<span class="op">=</span><span class="st">"hair_color"</span>, dv<span class="op">=</span><span class="st">"pain_threshold"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="64">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">W</th>
+<th data-quarto-table-cell-role="th">pval</th>
+<th data-quarto-table-cell-role="th">normal</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">hair_color</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Light Blond</td>
+<td>0.991032</td>
+<td>0.983181</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Dark Blond</td>
+<td>0.939790</td>
+<td>0.664457</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Light Brunette</td>
+<td>0.930607</td>
+<td>0.597974</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Dark Brunette</td>
+<td>0.883214</td>
+<td>0.324129</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Tests of normality Caveats:</p>
+<p>Keep in mind that when the sample size is small, the test for normality may not have enough power to make an accurate prediction. This is true for all the parametric tests we do.</p>
+<p>Also, very few, if any, real world data are perfectly normal. Most of the time we are trying to predict the mean, and not the extremes, and so it doesn’t really matter, because in large samples the means will be normally distributed (central limit theorum).</p>
+<p>Non Parametric tests are robust to outliers and large sample sizes, and are a good alternative when there is ambiguity about the normality of the data.</p>
+<div class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>stats.f_oneway(</span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"pain_threshold"</span>][df[<span class="st">"hair_color"</span>] <span class="op">==</span> <span class="st">"Light Blond"</span>],</span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"pain_threshold"</span>][df[<span class="st">"hair_color"</span>] <span class="op">==</span> <span class="st">"Light Brunette"</span>],</span>
+<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"pain_threshold"</span>][df[<span class="st">"hair_color"</span>] <span class="op">==</span> <span class="st">"Dark Brunette"</span>],</span>
+<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"pain_threshold"</span>][df[<span class="st">"hair_color"</span>] <span class="op">==</span> <span class="st">"Dark Blond"</span>],</span>
+<span id="cb94-8"><a href="#cb94-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb94-9"><a href="#cb94-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-10"><a href="#cb94-10" aria-hidden="true" tabindex="-1"></a><span class="co"># I prefer the pingouin output because it gives more information</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="65">
+<pre><code>F_onewayResult(statistic=6.791407046264094, pvalue=0.00411422733307741)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>aov <span class="op">=</span> pg.anova(dv<span class="op">=</span><span class="st">"pain_threshold"</span>, between<span class="op">=</span><span class="st">"hair_color"</span>, data<span class="op">=</span>df, detailed<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>aov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="66">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Source</th>
+<th data-quarto-table-cell-role="th">SS</th>
+<th data-quarto-table-cell-role="th">DF</th>
+<th data-quarto-table-cell-role="th">MS</th>
+<th data-quarto-table-cell-role="th">F</th>
+<th data-quarto-table-cell-role="th">p-unc</th>
+<th data-quarto-table-cell-role="th">np2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>hair_color</td>
+<td>1360.726316</td>
+<td>3</td>
+<td>453.575439</td>
+<td>6.791407</td>
+<td>0.004114</td>
+<td>0.575962</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Within</td>
+<td>1001.800000</td>
+<td>15</td>
+<td>66.786667</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The hair color has a p &gt; alpha, so we reject the null hypothesis. Hair color has been shown to have an effect.</p>
+<p>The eta squared (np2) indicates that 57.59% of the variance in pain thresholds can be explained by the hair color!!</p>
+<p>If there were more than one grouping variable, say, they also collected the gender and if the person was right handed or left handed, this could also be computed using an anova. And if there were other factors that could affect pain threshold, we would test them using an <a href="#ancova">ancova</a></p>
+<p>The number of groups helps us name the test. In the present experiment, we have done an 1-way anova, because there is one grouping variable. If there were 4 grouping variables, it would be a 4-way anova</p>
+<p>Calculating the power of the study</p>
+<div class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>num_groups <span class="op">=</span> df[<span class="st">"hair_color"</span>].nunique()</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>ob_per_group <span class="op">=</span> df.shape[<span class="dv">0</span>] <span class="op">/</span> num_groups  <span class="co"># Mean number of observations per group</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a>achieved_power <span class="op">=</span> pg.power_anova(</span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a>    eta_squared<span class="op">=</span>aov.loc[<span class="dv">0</span>, <span class="st">"np2"</span>], k<span class="op">=</span>num_groups, n<span class="op">=</span>ob_per_group, alpha<span class="op">=</span><span class="fl">0.05</span></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Achieved power: </span><span class="sc">%.4f</span><span class="st">"</span> <span class="op">%</span> achieved_power)</span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a><span class="co"># you can also look up the F Stat significance in tables available online</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Achieved power: 0.9729</code></pre>
+</div>
+</div>
+<p>Calculating the power of the study if this were particle physics, where the alpha is much much smaller</p>
+<div class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>num_groups <span class="op">=</span> df[<span class="st">"hair_color"</span>].nunique()</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>ob_per_group <span class="op">=</span> df.shape[<span class="dv">0</span>] <span class="op">/</span> num_groups  <span class="co"># Mean number of observations per group</span></span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>achieved_power <span class="op">=</span> pg.power_anova(</span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a>    eta_squared<span class="op">=</span>aov.loc[<span class="dv">0</span>, <span class="st">"np2"</span>], k<span class="op">=</span>num_groups, n<span class="op">=</span>ob_per_group, alpha<span class="op">=</span><span class="fl">0.00000057</span></span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Achieved power: </span><span class="sc">%.4f</span><span class="st">"</span> <span class="op">%</span> achieved_power)</span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a><span class="co"># If you fiddle around with the alpha, you would see how much the power varies</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Achieved power: 0.0089</code></pre>
+</div>
+</div>
+<p>Read more about the selection of alpha and its effects and how to pick a good alpha here: <a href="https://doi.org/10.1371/journal.pone.0208631">Miller, J., &amp; Ulrich, R. (2019). The quest for an optimal alpha. PloS one, 14(1), e0208631.</a></p>
+</section>
+<section id="ancova" class="level3">
+<h3 class="anchored" data-anchor-id="ancova">Ancova</h3>
+<p>Type: Parametric</p>
+<p>Applied to:</p>
+<ul>
+<li>Dependant Variable = continuous</li>
+<li>Independent Variable = categorical with 2 or more categories (nominal or ordinal)</li>
+<li>CoVariates = continuous</li>
+</ul>
+<p>Rationale:</p>
+<p>In many studies we are trying to make changes to or predict the changes to a dependant variable (DV) using an independent variable (IV). eg. Weight is being modified by total calorie intake or test scores being modified by the type of teaching method. In these situations, there could be other variables that also have an effect on the dependant variable. eg. In case of Weight, maybe the BMR of the patient matters. In case of the test scores maybe poverty matters. These are called the covariates (CV) of the DV. These contribute to the outcome heterogeneity.</p>
+<p>If we want to know the precise effect of the intervention (IV) like calorie restriction, and we do not account for all the things that make a difference to the dependant variable, we will have lower power and a less accurate result. Measuring the covariance maximizes power and precision.</p>
+<p>So to know how much of the change (variance) in the DV is being caused by these covariates, we need to break the overall variance down and separate out the variance caused by the covariates from the variance caused by the IV.</p>
+<p>If the covariates are continuous variables, the test we use is Ancova, which is an ANOVA+regression. Ancova also gives us the statistical power of the test.</p>
+<p>ANCOVA decomposes the variance in the DV into</p>
+<ol type="1">
+<li>Variance explained by the covariates,</li>
+<li>Variance explained by the categorical independent variable, and</li>
+<li>Residual variance.</li>
+</ol>
+<p>Overall, what we are trying to do is answer if patient A got treatment X instead of treatment Y, by how can we expect them to differ in outcomes. This effect is composed of the effect of the treatment, effect of covariates and residuals (unknowns).</p>
+<p>Null Hypothesis:</p>
+<p><span class="math inline">h_0</span> : There is no relationship between the IV and the DV, controlling for the covariates</p>
+<p>Assumptions:</p>
+<ol type="1">
+<li>A normal distribution of the covariates and dependant variable values in the sample.</li>
+<li>Each category/group that is being looked at should have at least 30 cases.</li>
+<li>The covariate and the treatment are independent (In experiemental studies)</li>
+<li>At each level of categorical independent variable, the covariate should be linearly related to the dependent variable (if the relationship is non linear, it reduces the power of the study)</li>
+<li>Equality of variances (Homoscedasticity)</li>
+</ol>
+<p>Read More:</p>
+<ol type="1">
+<li><a href="https://hbiostat.org/bbr/ancova">Biostats for Biomedical Research : Ancova</a></li>
+<li><a href="https://statsandr.com/blog/anova-in-r/">Stats and R: Anova in R</a></li>
+<li><a href="https://www.theanalysisfactor.com/assumptions-of-ancova/">When Assumptions of ANCOVA are Irrelevant</a></li>
+<li><a href="https://www.theanalysisfactor.com/ancova-assumptions-when-slopes-are-unequal">ANCOVA Assumptions: When Slopes are Unequal</a></li>
+</ol>
+<p>Dataset: We are using Pingouin’s inbuilt ancova dataset. In this study, they randomized students into different teaching methods and measured the scores. They also measured the BMI of the students and the Income. Our hypothesis here is the method has a significant effect on the scores, but we also want to know if other things like income and BMI have any role.</p>
+<div class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pingouin <span class="im">as</span> pg</span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pg.read_dataset(<span class="st">"ancova"</span>)</span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 36 entries, 0 to 35
+Data columns (total 4 columns):
+ #   Column  Non-Null Count  Dtype  
+---  ------  --------------  -----  
+ 0   Scores  36 non-null     int64  
+ 1   Income  36 non-null     float64
+ 2   BMI     36 non-null     int64  
+ 3   Method  36 non-null     object 
+dtypes: float64(1), int64(2), object(1)
+memory usage: 1.3+ KB</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>sns.pairplot(df, diag_kind<span class="op">=</span><span class="st">"hist"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-70-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>We can see that there does seem to be a linear relationship between the Income and scores, where as income and BMI do not appear correlated. The data do not appear to be normally distributed, but we can do more formal tests of this to be sure.</p>
+<div class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assumption testing:  Normality</span></span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Income: "</span>, stats.normaltest(df.Income))</span>
+<span id="cb104-7"><a href="#cb104-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"BMI: "</span>, stats.normaltest(df.BMI))</span>
+<span id="cb104-8"><a href="#cb104-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Scores: "</span>, stats.normaltest(df.Scores))</span>
+<span id="cb104-9"><a href="#cb104-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-10"><a href="#cb104-10" aria-hidden="true" tabindex="-1"></a><span class="co"># p &gt; alpha (0.05), accept the null hypothesis. The distribution of variables is normal.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Income:  NormaltestResult(statistic=1.8694971178536874, pvalue=0.392684590154046)
+BMI:  NormaltestResult(statistic=5.135141170153041, pvalue=0.0767217080617244)
+Scores:  NormaltestResult(statistic=3.517920062610699, pvalue=0.172223878164023)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.countplot(x<span class="op">=</span>df.Method)</span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Unequal sizes of each treatment group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-72-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="73">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assumption testing: Equal variance</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> sns.stripplot(</span>
+<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>df.Method, y<span class="op">=</span>df.BMI, dodge<span class="op">=</span><span class="va">True</span>, size<span class="op">=</span><span class="dv">8</span>, marker<span class="op">=</span><span class="st">"D"</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, hue<span class="op">=</span>df.Method</span>
+<span id="cb107-7"><a href="#cb107-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb107-8"><a href="#cb107-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-9"><a href="#cb107-9" aria-hidden="true" tabindex="-1"></a>sns.boxplot(  <span class="co"># This draws a line at the mean of each group</span></span>
+<span id="cb107-10"><a href="#cb107-10" aria-hidden="true" tabindex="-1"></a>    showmeans<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb107-11"><a href="#cb107-11" aria-hidden="true" tabindex="-1"></a>    meanline<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb107-12"><a href="#cb107-12" aria-hidden="true" tabindex="-1"></a>    meanprops<span class="op">=</span>{<span class="st">"color"</span>: <span class="st">"k"</span>, <span class="st">"ls"</span>: <span class="st">"-"</span>, <span class="st">"lw"</span>: <span class="dv">2</span>},</span>
+<span id="cb107-13"><a href="#cb107-13" aria-hidden="true" tabindex="-1"></a>    medianprops<span class="op">=</span>{<span class="st">"visible"</span>: <span class="va">False</span>},</span>
+<span id="cb107-14"><a href="#cb107-14" aria-hidden="true" tabindex="-1"></a>    whiskerprops<span class="op">=</span>{<span class="st">"visible"</span>: <span class="va">False</span>},</span>
+<span id="cb107-15"><a href="#cb107-15" aria-hidden="true" tabindex="-1"></a>    zorder<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb107-16"><a href="#cb107-16" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"Method"</span>,</span>
+<span id="cb107-17"><a href="#cb107-17" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"BMI"</span>,</span>
+<span id="cb107-18"><a href="#cb107-18" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>df,</span>
+<span id="cb107-19"><a href="#cb107-19" aria-hidden="true" tabindex="-1"></a>    showfliers<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb107-20"><a href="#cb107-20" aria-hidden="true" tabindex="-1"></a>    showbox<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb107-21"><a href="#cb107-21" aria-hidden="true" tabindex="-1"></a>    showcaps<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb107-22"><a href="#cb107-22" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>p,</span>
+<span id="cb107-23"><a href="#cb107-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb107-24"><a href="#cb107-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="01-BWP-deploy-bold_files/figure-html/cell-73-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The groups seem to have roughly similar variance. Approximately the same number of values above and below the mean marker</p>
+<div class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>pg.ancova(data<span class="op">=</span>df, dv<span class="op">=</span><span class="st">"Scores"</span>, covar<span class="op">=</span>[<span class="st">"Income"</span>, <span class="st">"BMI"</span>], between<span class="op">=</span><span class="st">"Method"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="74">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Source</th>
+<th data-quarto-table-cell-role="th">SS</th>
+<th data-quarto-table-cell-role="th">DF</th>
+<th data-quarto-table-cell-role="th">F</th>
+<th data-quarto-table-cell-role="th">p-unc</th>
+<th data-quarto-table-cell-role="th">np2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Method</td>
+<td>552.284043</td>
+<td>3</td>
+<td>3.232550</td>
+<td>0.036113</td>
+<td>0.244288</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Income</td>
+<td>1573.952434</td>
+<td>1</td>
+<td>27.637304</td>
+<td>0.000011</td>
+<td>0.479504</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>BMI</td>
+<td>60.013656</td>
+<td>1</td>
+<td>1.053790</td>
+<td>0.312842</td>
+<td>0.033934</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Residual</td>
+<td>1708.508657</td>
+<td>30</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<ul>
+<li><code>SS</code> is the sum of squares</li>
+<li><code>Df</code> is the degrees of freedome</li>
+<li><code>F</code> is the F statistic or the parameter being estimated</li>
+<li><code>P-unc</code> is the uncorrected p value</li>
+<li><code>np2</code> is the partial eta squared or the effect size</li>
+</ul>
+<p>In the above example, the effect size of the method explains 24.42% of the variance in the scores, and income explains 47.95%, both have significant p values. and BMI does not have a significant p value and so doesn’t play a role.</p>
+<p>This means that the effect size of method of teaching is only about half of the effect size of the income.</p>
+<p>About 27% of the remaining effect is unexplained. so there are probably other factors that we have not measured or theorized about that are causing this heterogeneity.</p>
+<p>Note that we have not answered the question which type of method of teaching is the best. This is done using an anova if there are more than 2 groups, and a student’s t-test if there are two.</p>
+<p>There is no non-parametric test that adjusts for covariates</p>
+</section>
+</section>
+<section id="other-tests" class="level2">
+<h2 class="anchored" data-anchor-id="other-tests">Other tests</h2>
+<section id="shapiro-wilk" class="level3">
+<h3 class="anchored" data-anchor-id="shapiro-wilk">Shapiro-wilk</h3>
+<ul>
+<li>This is a test of normality of data</li>
+<li>where non parametric tests are not useful or to understand the data better.</li>
+<li>The statistic by itself cannot be interpreted, the p-value is calculated using montecarlo and interpretation is based on that.</li>
+</ul>
+<p>The null-hypothesis of this test is that the population <strong>is normally distributed</strong>.</p>
+<p>So if the p value is less than the chosen alpha level, then there is evidence that the data are <strong>not</strong> normally distributed.</p>
+<p>This is useful when the sample n is &lt; 5000</p>
+<p>Caveats:</p>
+<ul>
+<li><p>When the sample size is small, the test may not have enough power to make an accurate prediction. So you get false negative that the data is normal</p></li>
+<li><p>When the data is large, even a few large outliers can cause a false positive that the data is not normal.</p></li>
+<li><p>Very few, if any, real world data are perfectly normal. linear models generally involve the assumption that their residuals i.e., the differences between observed and predicted values are normally distribted.</p></li>
+<li><p>Most of the time we are trying to predict the mean, and not the extremes, and so it doesn’t really matter, because in large samples the means will be normally distributed(central limit theorum).</p></li>
+<li><p>Non Parametric tests are robust to outliers and large sample sizes, and are a good alternative when there is ambiguity about the normality of the data.</p></li>
+</ul>
+<p>Read More: 1. <a href="https://link.springer.com/article/10.3758/s13428-023-02072-x">Shatz, I. Assumption-checking rather than (just) testing: The importance of visualization and effect size in statistical diagnostics. Behav Res 56, 826–845 (2024). https://doi.org/10.3758/s13428-023-02072-x</a></p>
+<div class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> shapiro</span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"mann-whitney-eva-data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>shapiro(df[<span class="st">"BDI_Sunday"</span>])</span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Since the p is lesser than the alpha, the data are not normally distributed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="76">
+<pre><code>ShapiroResult(statistic=0.7481864947430416, pvalue=0.000160534418300268)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>df_t <span class="op">=</span> pd.read_csv(<span class="st">"paired_t_bp.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>df_t.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="78">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">base_bp</th>
+<th data-quarto-table-cell-role="th">post_drg_bp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>125.4</td>
+<td>98.3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>118.9</td>
+<td>116.8</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>93.5</td>
+<td>96.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>131.2</td>
+<td>114.4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>120.7</td>
+<td>118.7</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>stats.shapiro(df_t[<span class="st">"base_bp"</span>][:<span class="dv">500</span>])</span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="co"># p &gt; alpha, reject null hypothesis. sample is normal.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="79">
+<pre><code>ShapiroResult(statistic=0.9954274847935575, pvalue=0.15032071619683773)</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp("http:\/\/boldresearch\.org");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

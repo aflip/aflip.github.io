@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-04-01">
+<meta name="description" content="How does search work">
+
+<title>Bold: Research and Development - What is semantic search and why do we want it</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/bold-logo-g.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">B<span class="icon-line"></span> <span class="hidden" data-render-id="quarto-int-navbar:Home">Home</span> <span class="hidden" data-render-id="quarto-int-navbar:/index.html">/index.html</span> <span class="hidden" data-render-id="quarto-int-navbar:Services">Services</span> <span class="hidden" data-render-id="quarto-int-navbar:/services.html">/services.html</span> <span class="hidden" data-render-id="quarto-int-navbar:Technical blog">Technical blog</span> <span class="hidden" data-render-id="quarto-int-navbar:/posts.html">/posts.html</span> <span class="hidden" data-render-id="quarto-int-navbar:Personal Blog">Personal Blog</span> <span class="hidden" data-render-id="quarto-int-navbar:https://anandphilip.com">https://anandphilip.com</span></span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../services.html" rel="" target="">
+ <span class="menu-text">Services</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html" rel="" target="">
+ <span class="menu-text">Technical blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://anandphilip.com" rel="" target="_blank">
+ <span class="menu-text">Personal Blog</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lexical-search-how-most-search-works" id="toc-lexical-search-how-most-search-works" class="nav-link active" data-scroll-target="#lexical-search-how-most-search-works">Lexical search: how most search works</a></li>
+  <li><a href="#enter-ai" id="toc-enter-ai" class="nav-link" data-scroll-target="#enter-ai">Enter AI!</a></li>
+  <li><a href="#semantic-search" id="toc-semantic-search" class="nav-link" data-scroll-target="#semantic-search">Semantic Search</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#citation" id="toc-citation" class="nav-link" data-scroll-target="#citation">Citation</a></li>
+  <li><a href="#further-reading-and-resources" id="toc-further-reading-and-resources" class="nav-link" data-scroll-target="#further-reading-and-resources">Further reading and resources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">What is semantic search and why do we want it</h1>
+</div>
+
+<div>
+  <div class="description">
+    How does search work
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 1, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“If cats looked like frogs we’d realize what nasty, cruel little bastards they are. Style. That’s what people remember.” ― Terry Pratchett, Lords and Ladies</p>
+</blockquote>
+<p>This post originally appeared on: <a href="https://anandphilip.com/">anandphilip.com</a></p>
+<p>You’re searching for poems that talk about cutlery. Because you can. And also because compiling a list of poems about our relationship with food-ingestion-tools would be fun.</p>
+<p>Maybe it’s not poetry you care about but the name of the company your boyfriend works at which he told you about three months ago but cant find on your Whatsapp. And obviously, it would be super awkward to ask him now.</p>
+<p>We have disparate search needs is what I am trying to say.</p>
+<section id="lexical-search-how-most-search-works" class="level2">
+<h2 class="anchored" data-anchor-id="lexical-search-how-most-search-works">Lexical search: how most search works</h2>
+<div class="card">
+<div class="card-body">
+<h4 class="card-title anchored">
+Definitions
+</h4>
+<p class="card-text">
+</p><p><strong>Query</strong>: The text we enter into search fields when we want stuff found</p>
+<p><strong>Document</strong>: The file, website, chat, image, meme stash or entity that has the terms or could have the the right answers to your search</p>
+<strong>Corpus</strong>: The collection of&nbsp; all the documents that need to be searched across various searches. (your whole website for example)
+<p></p>
+</div>
+</div>
+<p>The standard way in which we do search is by matching the words or terms in a query with the terms in the corpus. So if you search for <mark><em>poems about cutlery</em></mark> &nbsp;the search will look for documents that have the words <mark><em>poems</em></mark> and/or <mark><em>cutlery</em></mark> and try to find ones that contain both the words.</p>
+<p>Imagine, though, that the program has to scan through every document every time someone searches for something, hunting for instances of the word from scratch. This would be pretty time-consuming and also slightly stupid. So we need a way to store what words are in what documents.</p>
+<p>Besides just matching or finding the word, we also need some way of knowing which document matches it better. This is called <strong>ranking</strong>. To solve both these problems&nbsp; people came up with the idea of <strong>indexes</strong> (or indices, if you’re a Latin snob).</p>
+<p>What an index does is, it look over all the documents in a corpus, and creates a brief representation of the content of that document. So instead of searching over the whole document, now you just search over the representations. These representations also have some way of ranking the quality of the fit between the query and the document.</p>
+<p>An example of such a representation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Term Frequency–Inverse Document Frequency</a> (TF-IDF). What this does is,</p>
+<ol type="1">
+<li>Lists all the words in each of the documents in a corpus and how frequently the occur in a document (term frequency).</li>
+<li>Calculates <mark><em>how common</em></mark> or <mark><em>how rare</em></mark> of each of these words are across the whole corpus. The common words get a score of 0, or close to zero and the rare words get high scores. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+</ol>
+<p>Why do we do this? In most documents, the words that appear most frequently would be things like <mark><em>the</em>, <em>and</em>, <em>is</em></mark> and stuff that doesn’t add any discriminatory power to the retrieval.</p>
+<p>When I search for <mark><em>poems with cutlery</em></mark>&nbsp; there are going to be a whole lotta&nbsp; poems with the word <mark><em>with</em></mark> in them, so I can’t use <mark><em>with</em></mark> to rank the documents in any way. But the word <mark><em>cutlery</em></mark> probably appears in a small number of poems, so it is a good word for ranking the results.</p>
+<p><img src="wiki-tif-idf.png" title="Screenshot of wikipedia TF-IDF of shakespear's plays" class="img-fluid"></p>
+<p>So now your index of poems doesn’t just have the whole text of the poem but a list of the non-zero scoring words along with the scores, which allows us to get the top matches.</p>
+<p>The most used and probably the best of these TF-IDF&nbsp; algorithms is the&nbsp; <a href="https://en.wikipedia.org/wiki/Okapi_BM25">Okapi BM25</a> &nbsp;family of algorithms. They are absolutely fantastic in finding you the documents that are best matching the words you search for.</p>
+<p>But what if you don’t know the precise thing you are searching for? This is also a problem as old as misplaced keys. One way to solve this would be to have some kind of a thesaurus. You search for <em>cutlery</em>&nbsp; and we expand the terms to include all the synonyms of the word. This is called <a href="https://en.wikipedia.org/wiki/Query_expansion"><strong>query expansion</strong></a>. So instead of sending the term <mark><em>cutlery</em></mark> to the index, we can send <mark><em>cutlery, knife, fork, teaspoon</em></mark> and see what the index gives us.</p>
+<p>But that means now you need to figure out which words you want to find synonyms for, how to store them, how to update them periodically etc. And what if you need to find synonyms of phrases, not words, eg. <mark><em>our relationship with modern day digital technology</em></mark>. That would make very large search term if we expanded each word. Still, this is a pretty damn good method and is used widely and is what Google uses to return close matches.</p>
+<p><img src="cutlery.png" title="Screenshot of cutlery synonyms from Thesaurus.com" class="img-fluid"></p>
+<p>Another problem could be that you might misspell the word, or that your way of spelling antidisestablishmentarianism<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> is different from the way it appears in the text, say “anti-dis-establishmentarianizm” or whatever.&nbsp; The usual solution to this is to add some <a href="https://en.wikipedia.org/wiki/Approximate_string_matching">“fuzzy” logic or approximate matching</a>. This works by searching for words that are off or different by a few letters. Unfortunately this means that if you search for <mark><em>costly <strong>coat</strong> cuts</em></mark>,&nbsp; you’ll also get results for <mark><em>costly <strong>cat</strong> guts</em> </mark><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.&nbsp; Still, this too is pretty damn good and is usually&nbsp; a part of most search systems.</p>
+<p>You could also offer spelling correction, as google often does. But problems with autocorrect are well known</p>
+<p><img src="d-photo-u1.webp" title="meme about turning off autocorrect featuring Austin Powers" class="img-fluid"></p>
+<p>I am compelled to point to <a href="https://www.google.com/search?q=%22yet+another%22+%2B+kerala&amp;client=firefox-b-d&amp;sca_esv=578063141&amp;hl=en&amp;biw=1600&amp;bih=829&amp;sxsrf=AM9HkKk9prz62bHFsXf0ZHYJ_FvBS_pObw%3A1698735236039&amp;ei=hKRAZa2DAoeX4-EPr96F2AU&amp;ved=0ahUKEwit1b7y2Z-CAxWHyzgGHS9vAVsQ4dUDCA8&amp;uact=5&amp;oq=%22yet+another%22+%2B+kerala&amp;gs_lp=Egxnd3Mtd2l6LXNlcnAiFiJ5ZXQgYW5vdGhlciIgKyBrZXJhbGEyBRAhGKABMgUQIRigAUjuJlDOCViwJXACeACQAQCYAfoBoAGNDKoBBTAuOC4yuAEDyAEA-AEBwgIIEAAYogQYsAPCAgoQIRigARjDBBgKwgIFEAAYogTiAwQYASBBiAYBkAYD&amp;sclient=gws-wiz-serp#ip=1">yet another problem:</a> Besides synonyms, there are words that are structurally similar, or stem from the same word. These too might make a good fit or a bad fit for a particular search query based on the context, for eg. if you’re searching for <mark><em>load bearing</em> <em>walls</em></mark>, it might be good to get results for <mark><em>load bearing tiles</em></mark>, but not good to get <mark><em>bear loading</em></mark> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p><img src="713a3272124cc57ba9e9fb7f59e9ab3b.webp" title="gif of a cartoon bear walking across a loading progress bar" class="img-fluid"></p>
+<p>Anyway, so what we need is a way to represent text that can account for</p>
+<ol type="1">
+<li>Variations in the way a word is written</li>
+<li>Contextual meaning of words (A coat of paint vs a coat of mink)</li>
+<li>Spelling mistakes</li>
+<li>Synonyms</li>
+</ol>
+<p>All these things are present in the way we write and store information. So if you were to take a sufficiently large sample of things people have written, you would find all of these things in this sample. <strong>This idea</strong> is what gives us semantic search.</p>
+</section>
+<section id="enter-ai" class="level2">
+<h2 class="anchored" data-anchor-id="enter-ai">Enter AI!</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="DALL·E-2023-11-01-16.55.39-AI-entering-the-room-comical-image-300px.png" title="Image features a Robot framed in a doorway, with the words &quot;AROOM&quot; written abobe the doorway" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Created with Dall-E</figcaption>
+</figure>
+</div>
+<p>Kidding, AI is a marketing myth, who wants to buy “statistical-learning models”?</p>
+<p>But that is what we do, we take a large corpus of text, and then derive a statistical model of the relationships between words in a multi dimensional space. And we do this by masking text and getting a model to fill in the blanks. No, seriously, that’s it. This is the basis of all LLMs.</p>
+<p>What this does is, make a model memorize and therefore extract all the million ways in which any given word can be used in a language and also how each word in the corpus is related to every other word. This is not something we can manually compute and that is why we throw <a href="https://anandphilip.com/what-are-artificial-neural-networks-and-how-do-they-work-a-non-technical-explanation/">artificial neural networks at it</a>.</p>
+<p>Now, most LLMs and other things that are called AI these days don’t stop here, and have to predict specific things. But if you take off those prediction bits from the model what you have left is called an embedding. Which is a multi-dimensional representation of whatever it is that you trained the thing to do. Engineers, like many of us, suffering from grievous mathematics envy, call these representations <strong>vectors</strong>.</p>
+<p>The way these work is that words and documents that are similar in meaning are represented closer to each other, or clustered. But this happens over many dimensions, so it’s not a simple 1 or 2 D relationship it captures.</p>
+<p><img src="https://i0.wp.com/anandphilip.com/wp-content/uploads/Screenshot-2023-11-01-at-18-27-32-Embedding-projector-visualization-of-high-dimensional-data.png?resize=925%2C805&amp;ssl=1" title="Embedding projector visualization of high dimensional data from TensorFlow" class="img-fluid"></p>
+<p>See how the word noticed is close to, and connected to all the words that are similar in meaning. The above is a screenshot of one such embedding. I strongly urge you to explore this. Link: <a href="https://projector.tensorflow.org/">Word2Vec Tensorboard</a></p>
+<p>Another tool to understand how words can be represented in multiple dimensions is this <a href="http://blog.echen.me/embedding-explorer/#/">embedding explorer from Edwin Chen</a>.</p>
+<p>What is most interesting to me is that this rich and pretty accurate representation is produced using something as simple as fill-in-the-blanks.</p>
+</section>
+<section id="semantic-search" class="level2">
+<h2 class="anchored" data-anchor-id="semantic-search">Semantic Search</h2>
+<p clas="large-p">
+Searching for things using the information implicitly encoded in these vector spaces is called semantic search by software and ML people.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>
+</p>
+<p>So if you don’t want to manually manage everything from synonyms to contextual meaning, you could take a vector space trained on a very large corpus, convert your corpus into those kind of vectors, and then search over those vectors. This conversion just borrows the relationships that are already discovered by the model, which means its representations will be much richer than the ones in your corpus.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>These vector spaces are not like the indexes we spoke of earlier, they don’t have any explicit way of saying <mark><em>word x is present in document z and the score is high</em>.</mark></p>
+<p>The search works by identifying documents that are “close” to the query in the vector space. The most commonly used metric to determine this distance is <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a>. But even if you can calculate the cosine distance between two words, doing this calculation for every word in your corpus against every word in the query would be mind-numbingly boring and also time and resource consuming. So we need some way to find the location in the vector space that is most likely to have good results, and get there quickly.</p>
+<p>This is called <strong>approximate nearest neighbor search</strong>, and there are a bunch of great algorithms that have come up in the last few years that let you search over humongous datasets really fast.</p>
+<p>The ones I like the most are <a href="https://github.com/yahoojapan/NGT/wiki">Neighborhood Graph Trees</a> and <a href="https://www.pinecone.io/learn/series/faiss/hnsw/">Hierarchical Navigable Small Worlds</a> (HNSW)</p>
+<p>Both of them work by dividing up your data into small clusters, or trees and then searching in those trees or clusters. But really, it’s a lot more complicated than that and to be honest I don’t really understand graph theory enough to know what they do. But what they do they do do well.</p>
+<p>This might remind you of indexes, and that is what these create, just, vector and tree representations, not words.</p>
+<p><img src="https://i0.wp.com/anandphilip.com/wp-content/uploads/image-10.png?resize=1024%2C555&amp;ssl=1" class="img-fluid"></p>
+<p><em>image from Pinecone’s guide to semantic search, linked below</em></p>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<ul>
+<li>You embed your corpus onto an existing language model’s vector space</li>
+<li>You then index your embedding using a ANN algorithm like NGT or HNSW</li>
+<li>And then you can search your corpus using semantic querying.</li>
+</ul>
+<p>Thanks for reading.</p>
+<p><img src="https://i0.wp.com/anandphilip.com/wp-content/uploads/DCxiwAJ_.jpeg?resize=512%2C512&amp;ssl=1" class="img-fluid"></p>
+<p>This cat does not exist. <a href="https://deepai.org">Created with DeepAI</a></p>
+</section>
+<section id="citation" class="level2">
+<h2 class="anchored" data-anchor-id="citation">Citation</h2>
+<p class="note">
+</p><p>If you wish to cite this page, here you go</p>
+Philip. (2023, November 1). What is semantic search and why do we want it. Anand Philip’s Blog. Retrieved February 22, 2024, from https://anandphilip.com/what-is-semantic-search-and-why-do-we-want-it/
+<p></p>
+</section>
+<section id="further-reading-and-resources" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading-and-resources">Further reading and resources</h2>
+<ul>
+<li><a href="https://vickiboykis.com/what_are_embeddings">Viki Boykis has a great resource page and explanation of what embeddings are</a></li>
+<li><a href="https://ann-benchmarks.com/">ANN-Benchmarks:</a> This website has benchmarks for every approximate nearest neighbor algorithm you can think of [NGT and HNSW are the best]</li>
+<li>Pinecone, which is a vector database solution, has a great series on <a href="https://www.pinecone.io/learn/series/nlp/">Natural Language Processing for Semantic Search</a></li>
+</ul>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>This is not the most commonly used representation, sometimes you just store the title of the document, somethings you store a description, it depends on the need of the system and users.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Engineers really love logarithms. <a href="https://www.nature.com/articles/news.2008.866">We should too</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>I am, of course a <a href="https://en.wikipedia.org/wiki/Disestablishmentarianism">disestablishmentarianist</a> and several centuries behind on news<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>If you’re into coat cuts. Whatever they are, no judgement here.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>I know, my metaphors need work. They are unemployed<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Complicating the matters is that before there were large neural network based embeddings, there were the <a href="https://en.wikipedia.org/wiki/Semantic_Web">semantic web people</a> and the ontology people and other people who wanted to solve this using structured representation of text. So software people are kinda stealing the term a little bit. More info: <a href="https://sci-hub.se/10.1109/DEST.2008.4635202">A survey in semantic search technologies</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Thankfully there is a <a href="https://huggingface.co/sentence-transformers/all-mpnet-base-v2">huge community of NLP nerds who like making these kinds of models easy to use</a> (if you can Python, that is).<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp("http:\/\/boldresearch\.org");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
