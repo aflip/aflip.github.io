@@ -139,16 +139,24 @@ ul.task-list li input[type="checkbox"] {
 <blockquote class="blockquote">
 <p>“The trouble with having an open mind, of course, is that people will insist on coming along and trying to put things in it.” ― Terry Pratchett, Diggers</p>
 </blockquote>
-<p>As with any new project, one of the best ways to (productively) procrastinate is to decide to learn some new tech. I’ve been putting up wordpress websites since the beginning of time and I am kinda bored of it. Most of my writing is in python, markdown files and jupyter notebooks, and so i figured a markdown and code friendly publishing platform would be a good thing. I looked around at the billion static site generators on <a href="https://jamstack.org/generators/">Jamstack’s list</a>, tried out a bunch. Ultimately, the ease of use and features that I found on <a href="https://hbiostat.org/bbr/">Frank harrel’s biostates site</a>, I decided to use Quarto.</p>
-<p>Quarto is a R-language native publishing system that renders using bootstrap themes. Seemed simple enough, and then I disappeared into the world of bootstrap site customizations. Along the way, I discovered several Quarto sites that were of great help and here they are.</p>
+<p>As with any new project, one of the best ways to (productively) procrastinate is to decide to learn some new tech. I’ve been putting up wordpress websites since the beginning of time and I am kinda bored of it. Most of my writing is in python, markdown files and jupyter notebooks, and so i figured a markdown and code friendly publishing platform would be a good thing. I looked around at the billion static site generators on <a href="https://jamstack.org/generators/">Jamstack’s list</a>, picked the ones that were python friendly and tried out Pelican, Lektor, Nikola, Hugo, Gatsby and skipped Jekyll because I had tried it out months ago.</p>
+<p>All the tested SSGs were fast and easy enough to put up a basic website. But boy when it came to customizing the theme, adding special features and even something as simple as search, the experience was not fun at all.</p>
+<p>I finally settled on Quarto because</p>
+<ol type="1">
+<li><a href="https://hbiostat.org/bbr/">Frank harrel’s excellent biostats site</a> is using it</li>
+<li>Bootstrap seemed like a relatively tameable beast for themeing</li>
+<li>Pretty much all the guides for it out there were by scientists of different kinds which meant dealing with Jupyter notebooks and bibliographies and rendering code and graphs and a bunch of other things that nerds care about are taken care of.</li>
+</ol>
+<p>Along the way, I discovered several useful tools and blogs that were of great help and here they are.</p>
 <p>Overall, I probably spent the most time on <a href="https://quarto.org/docs/guide/">Quarto’s documentation</a>, which, while sparse, are very good for setting things up and learning the basics.</p>
 <p><a href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/">Marvin Schmitt’s template</a> and detailed posts about how go about doing everything from setting up a site and structuring it were the most help inititally</p>
+<p>I ended up with a refresher course on CSS’s grid system, and overall for boostrap the best guide was their <a href="https://getbootstrap.com/docs/5.1/layout/css-grid/">website</a>. A huge number of seemingly bot generated websites exist for bootstrap theme customization, but boy they suck.</p>
 <p><a href="https://ellakaye.co.uk/">Ella Kay’s website</a> was a huge help. I’ve learned a lot from her config files on the <a href="https://github.com/EllaKaye/ellakaye.co.uk/blob/main/">github repo</a></p>
-<p><a href="https://silviacanelon.com/blog/2023-09-29-hello-quarto/">Silvia Canelon’s detailed documentation</a> of how she ported from hugo was super useful in understanding the quirks of Quarto</p>
-<p><a href="https://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/#iii.-adding-a-blog-to-your-personal-quarto-website">Sam Csik’s guide on how to set up a blog</a> inside the site is what I have used to set up the blog on this site.</p>
-<p>I used the <a href="https://huemint.com/bootstrap-plus/s">Huemint bootstrap theme generator</a> to generate the css/scss for colors</p>
+<p><a href="https://silviacanelon.com/blog/2023-09-29-hello-quarto/">Silvia Canelon’s detailed documentation</a> of how she ported from hugo was super useful in understanding the quirks of the system</p>
+<p><a href="https://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/#iii.-adding-a-blog-to-your-personal-quarto-website">Sam Csik’s guide on how to set up a blog</a> is what I have used to set up this blog</p>
 <p>I admit I spent an inordinate amount of time on <a href="https://mycolor.space/">this palette generator</a></p>
-<p>Finally,<a href="https://projects.susielu.com/viz-palette">Susie Lu’s Viz Palette app</a> helped me with figuring out what color combos were best for readability and for those with visual problems.</p>
+<p>I used the <a href="https://huemint.com/bootstrap-plus/s">Huemint bootstrap theme generator</a> to generate the css/scss for colors</p>
+<p>Finally, <a href="https://projects.susielu.com/viz-palette">Susie Lu’s Viz Palette app</a> helped me with figuring out what color combos were best for readability and for those with visual problems.</p>
 <p>PS: I went down a rabbithole of designing perceptually uniform color palettes but then I realized, many moons later that while we need to use these for designing visualizations, a website’s color design doesn’t need to be perceptually uniform.</p>
 
 

@@ -13,7 +13,10 @@ format:
 
 > “The trouble with having an open mind, of course, is that people will insist on coming along and trying to put things in it.” ― Terry Pratchett, Diggers
 
-As with any new project, one of the best ways to (productively) procrastinate is to decide to learn some new tech. I've been putting up wordpress websites since the beginning of time and I am kinda bored of it. Most of my writing is in python, markdown files and jupyter notebooks, and so i figured a markdown and code friendly publishing platform would be a good thing. I looked around at  the billion static site generators on [Jamstack's list](https://jamstack.org/generators/), tried out a bunch. Ultimately, the ease of use and features that I found on [ Frank harrel's biostates site](https://hbiostat.org/bbr/), I decided to use Quarto. 
+As with any new project, one of the best ways to (productively) procrastinate is to decide to learn some new tech. I've been putting up wordpress websites since the beginning of time and I am kinda bored of it. Most of my writing is in python, markdown files and jupyter notebooks, and so i figured a markdown and code friendly publishing platform would be a good thing. I looked around at  the billion static site generators on [Jamstack's list](https://jamstack.org/generators/), picked the ones that were python friendly and  tried out Pelican, 
+
+
+ tried out a bunch. Ultimately, the ease of use and features that I found on [ Frank harrel's biostates site](https://hbiostat.org/bbr/), I decided to use Quarto. 
 
 Quarto is a R-language native publishing system that renders using bootstrap themes. Seemed simple enough, and then I disappeared into the world of bootstrap site customizations. Along the way, I discovered several Quarto sites that were of great help and here they are. 
 
