@@ -2,30 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://boldresearch.org/services.html</loc>
-    <lastmod>2024-05-08T15:09:06.143Z</lastmod>
+    <lastmod>2024-05-08T15:13:26.547Z</lastmod>
   </url>
   <url>
     <loc>http://boldresearch.org/blog/resources-for-making-quarto-blog/index.html</loc>
-    <lastmod>2024-05-08T15:09:05.551Z</lastmod>
+    <lastmod>2024-05-08T15:13:25.963Z</lastmod>
   </url>
   <url>
     <loc>http://boldresearch.org/blog/sem-search-notes/index.html</loc>
-    <lastmod>2024-05-08T15:09:04.935Z</lastmod>
+    <lastmod>2024-05-08T15:13:25.343Z</lastmod>
   </url>
   <url>
     <loc>http://boldresearch.org/index.html</loc>
-    <lastmod>2024-05-08T15:09:02.259Z</lastmod>
+    <lastmod>2024-05-08T15:13:22.463Z</lastmod>
+  </url>
+  <url>
+    <loc>http://boldresearch.org/LICENSE.html</loc>
+    <lastmod>2024-05-08T15:13:22.651Z</lastmod>
   </url>
   <url>
     <loc>http://boldresearch.org/blog/biostat-with-python-01/01-BWP-deploy-bold.html</loc>
-    <lastmod>2024-05-08T15:09:04.451Z</lastmod>
+    <lastmod>2024-05-08T15:13:24.847Z</lastmod>
   </url>
   <url>
     <loc>http://boldresearch.org/blog/what-is-semantic-search/index.html</loc>
-    <lastmod>2024-05-08T15:09:05.351Z</lastmod>
+    <lastmod>2024-05-08T15:13:25.759Z</lastmod>
   </url>
   <url>
     <loc>http://boldresearch.org/posts.html</loc>
-    <lastmod>2024-05-08T15:09:05.875Z</lastmod>
+    <lastmod>2024-05-08T15:13:26.279Z</lastmod>
   </url>
 </urlset>
