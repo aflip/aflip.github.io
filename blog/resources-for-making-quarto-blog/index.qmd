@@ -35,7 +35,7 @@ Overall, I probably spent the most time on [Quarto's documentation](https://quar
 
 I ended up with a refresher course on CSS's grid system, and overall for boostrap the best guide was their [website](https://getbootstrap.com/docs/5.1/layout/css-grid/). A huge number of seemingly bot generated websites exist for bootstrap theme customization, but boy they suck. 
 
-[Ella Kay's website](https://ellakaye.co.uk/) was a huge help. I've learned a lot from her config files on the [github repo](https://github.com/EllaKaye/ellakaye.co.uk/blob/main/)
+[Ella Kaye's website](https://ellakaye.co.uk/) was a huge help. I've learned a lot from her config files on the [github repo](https://github.com/EllaKaye/ellakaye.co.uk/blob/main/)
 
 [Silvia Canelon's detailed documentation](https://silviacanelon.com/blog/2023-09-29-hello-quarto/) of how she ported from hugo was super useful in understanding the quirks of the system
 
