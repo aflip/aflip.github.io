@@ -15,7 +15,7 @@ format:
 <p class="large-p">
 I'm a family physician interested in how information technology can improve (or worsen) decision making in and outside healthcare. 
 </p>
-This fuels **Bold**, my health-tech R&D practice where I build tools for my clients using the best technology for the problem. Sometimes these are ML/AI models and sometimes these are guildelines.
+This fuels **Bold**, my health-tech R&D practice where I build tools for my clients using the best technology for the problem. Sometimes these are ML/AI models and sometimes these are guidelines.
 
 Read more about specific services I offer [here](services.qmd)
 
