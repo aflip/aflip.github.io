@@ -27,7 +27,7 @@ Read more about specific services I offer [here](services.qmd)
 
 </div>
 
-## Ongoing Projects
+## Updates
 
 <div class="grid">
 
@@ -55,13 +55,15 @@ Last year I did a deep dive into semantic and vector based search, made a poetry
 <div class="g-col-12 g-col-md-6">
 <h3> Statistics [{{< fa brands github >}}](https://github.com/aflip/biostats-with-python)</h3></h3>
 
-
 In collaboration with Medibuddy, I created a guide to conducting and selecting statistical tests using Python. This guide serves as a quick reference for their research team, promoting standardization and efficiency in research workflows. You can read the whole guide and run it on colab here: 
 
 - [Parametric and non-parametric tests in {{< fa brands python >}} python](blog/biostat-with-python-01/01-BWP-deploy-bold.html)
 - Watch the repo for further notebooks/installations as this is under active development
 </div>
-
+<div class="g-col-12 g-col-md-6" >
+<h3> latest Blog</h3>
+- [Four heuristics for RAG in Medicine](https://boldresearch.org/blog/opinionated-RAG-heuristics/index.html)
+</div>
 </div>
 
 ## Get in touch [{{< fa envelope   title="icon of an envelope" >}}](mailto:hello@boldresearch.org)  [{{< fa brands mastodon title="mastodon icon" >}}](https://sigmoid.social/@anandphilipc) [{{< fa brands linkedin  title="linkedin icon" >}}](https://www.linkedin.com/in/anandphilip/) [{{< fa brands twitter  title="twitter icon" >}}](https://www.twitter.com/anandphilipc/)
