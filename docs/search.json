@@ -84,25 +84,25 @@
     "text": "Converting search into recommendations\n\nAdd some way of taking in user preferences either upfront, or for each search result\nUse these to create (or match) a features for your corpus\nupdate the search and ranking method to add these features\n\nMore information about design patterns in recommendation systems can be found here: Yan, Ziyou. (Jun 2021). System Design for Recommendations and Search. eugeneyan.com."
   },
   {
-    "objectID": "posts.html",
-    "href": "posts.html",
-    "title": "Bold Research Blog",
+    "objectID": "blog/opinionated-RAG-heuristics/index.html",
+    "href": "blog/opinionated-RAG-heuristics/index.html",
+    "title": "Four Opinionated Heuristics For RAG in Medicine",
     "section": "",
-    "text": "Resources I used for making this quarto website\n\n\n\n\n\n\n\n\n\nMay 7, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStatistical tests for biomedical research with python\n\n\nA guide to conducting and selecting statistical tests in Python\n\n\n\n\n\n\nMay 1, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is semantic search and why do we want it\n\n\nHow does search work\n\n\n\n\n\n\nApr 1, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSteps for implementing semantic search on a text corpus\n\n\ntraining notes\n\n\n\n\n\n\nNov 16, 2023\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "She’d been a kitchen maid and now she was subjecting the Book to critical analysis and talking to a religious icon. That sort of thing led to friction. The presence of those seeking the truth is infinitely to be preferred to the presence of those who think they’ve found it. – Polly Perks, Monstrous Regiment\nThe stakes are (relatively) low when\nThe most touted uses of RAG in medicine are question answering and paper or information summarization.\nThe state of the art in medical question answering on closed, carefully selected datasets using models that in all likelihood have had access to the test data, is around 80% which means the probability of getting at least one wrong answer in 10 is around 89%.The median numbers are a whole lot worse. If you can’t afford the latest model to be answering your questions or doing the generation, imagine the possibility of error. (or do the math, your call)\nStats for summarization are a whole lot worse. And a whole lot tougher to quantify. But, if you want some quick summaries, with the aim of deciding what to focus on, or what to read etc. this is probably pretty good.\nAnother low stakes situation is when the data is small. Summarizing a couple of paragraph is likely to have less errors than summarizing a paper. or summarizing multiple papers at once. Context lengths are not created equally.\nRAG that is generation heavy is going to be about as good as vanilla generation, and this excels at boilerplate generation, ideation, rephrasing the immensely common, responds to carefully worded/structured prompts, has high accuracy with chunked generation, and is great for iterative interactions.\nThe evidence for the awesomness of graph embeddings and knowledge graphs in the LM contexts are not all that clear, but they have been shown to reduce halluciations and that is good enough for me.\nThe above heuristics are for deployment in the wild, not personal or research purposes."
   },
   {
-    "objectID": "services.html",
-    "href": "services.html",
-    "title": "Services offered at BOLD",
-    "section": "",
-    "text": "I provide consulting services to startups seeking insights and guidance from a clinical technologist specializing in data/ML/AI and decision-related domains. I am as happy to talk strategy as doing data modelling. Especially if we can talk about ethics and risk upfront.\nContact me if you would like to work on applied machine learning /AI in healthcare or really anything ML. Email, Mastodon, Linkedin are all good ways to get in touch. Details below.\nI am mostly located in Bengaluru, India."
+    "objectID": "blog/opinionated-RAG-heuristics/index.html#footnotes",
+    "href": "blog/opinionated-RAG-heuristics/index.html#footnotes",
+    "title": "Four Opinionated Heuristics For RAG in Medicine",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nChain of thought prompting is probably useless, can justify things in an authoritative sounding way, which can confuse and waylay the user.↩︎\nI know, circular reasoning, but low stakes are easier to identify than define.↩︎"
   },
   {
-    "objectID": "services.html#get-in-touch",
-    "href": "services.html#get-in-touch",
-    "title": "Services offered at BOLD",
-    "section": "Get in touch    ",
-    "text": "Get in touch"
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "Bold: Research and Development",
+    "section": "",
+    "text": "BSD 2-Clause License\nCopyright (c) 2024, Anand Philip\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
   },
   {
     "objectID": "index.html",
@@ -133,11 +133,25 @@
     "text": "Fuelled by:"
   },
   {
-    "objectID": "LICENSE.html",
-    "href": "LICENSE.html",
-    "title": "Bold: Research and Development",
+    "objectID": "services.html",
+    "href": "services.html",
+    "title": "Services offered at BOLD",
     "section": "",
-    "text": "BSD 2-Clause License\nCopyright (c) 2024, Anand Philip\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+    "text": "I provide consulting services to startups seeking insights and guidance from a clinical technologist specializing in data/ML/AI and decision-related domains. I am as happy to talk strategy as doing data modelling. Especially if we can talk about ethics and risk upfront.\nContact me if you would like to work on applied machine learning /AI in healthcare or really anything ML. Email, Mastodon, Linkedin are all good ways to get in touch. Details below.\nI am mostly located in Bengaluru, India."
+  },
+  {
+    "objectID": "services.html#get-in-touch",
+    "href": "services.html#get-in-touch",
+    "title": "Services offered at BOLD",
+    "section": "Get in touch    ",
+    "text": "Get in touch"
+  },
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Bold Research Blog",
+    "section": "",
+    "text": "Four Opinionated Heuristics For RAG in Medicine\n\n\n\n\n\n\n\n\n\nNov 20, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nResources I used for making this quarto website\n\n\n\n\n\n\n\n\n\nMay 7, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStatistical tests for biomedical research with python\n\n\nA guide to conducting and selecting statistical tests in Python\n\n\n\n\n\n\nMay 1, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is semantic search and why do we want it\n\n\nHow does search work\n\n\n\n\n\n\nApr 1, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSteps for implementing semantic search on a text corpus\n\n\ntraining notes\n\n\n\n\n\n\nNov 16, 2023\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "blog/resources-for-making-quarto-blog/index.html",

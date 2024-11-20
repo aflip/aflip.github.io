@@ -2,6 +2,7 @@
   {
     "listing": "/posts.html",
     "items": [
+      "/blog/opinionated-RAG-heuristics/index.html",
       "/blog/resources-for-making-quarto-blog/index.html",
       "/blog/biostat-with-python-01/01-BWP-deploy-bold.html",
       "/blog/what-is-semantic-search/index.html",
