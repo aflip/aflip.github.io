@@ -148,24 +148,49 @@ ul.task-list li input[type="checkbox"] {
 <blockquote class="blockquote">
 <p>She’d been a kitchen maid and now she was subjecting the Book to critical analysis and talking to a religious icon. That sort of thing led to friction. The presence of those seeking the truth is infinitely to be preferred to the presence of those who think they’ve found it. – Polly Perks, Monstrous Regiment</p>
 </blockquote>
+<section id="the-heuristics-are" class="level2">
+<h2 class="anchored" data-anchor-id="the-heuristics-are">The heuristics are:</h2>
 <ol type="1">
-<li><p>If the stakes are low use vanilla RAG, it makes life easier and looks cool.</p></li>
-<li><p>If the stakes are high, use hybrid retrieval ± recommender systems, with minimal generation</p></li>
-<li><p>If reasoning is needed, or higher accuracy is needed, use knowledge graphs or graph embeddings, and then use hybrid retrieval, recsys wisdom, generation etc. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p></li>
-<li><p>Always show your sources alongside the generated data.</p>
-<p>What are we afraid of? Hallucinations, ommisions and bias. How do we solve it? We cite our sources. We need to be doing a bunch of other things, but we’ll start here.</p></li>
+<li><strong>Low Stakes</strong>: Use vanilla RAG
+<ul>
+<li>Easy to implement and looks cool</li>
+</ul></li>
+<li><strong>High Stakes</strong>: Use hybrid retrieval ± recommender systems
+<ul>
+<li>Minimize generation <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Focus on accurate information retrieval then generate</li>
+</ul></li>
+<li><strong>Complex Reasoning or High Accuracy Needed</strong>: Use knowledge graphs or graph embeddings
+<ul>
+<li>Combine with hybrid retrieval, recommender systems, and minimal generation</li>
+<li>Helps reduce hallucinations and improve accuracy</li>
+</ul></li>
+<li><strong>Always Show Sources</strong>: Cite alongside generated data
+<ul>
+<li>Addresses concerns of hallucinations, omissions, and bias</li>
+<li>Promotes transparency and verifiability</li>
+</ul></li>
 </ol>
+</section>
+<section id="on-low-stakes" class="level2">
+<h2 class="anchored" data-anchor-id="on-low-stakes">On low stakes</h2>
 <p>The stakes are (relatively) low when</p>
 <ol type="1">
-<li><p>No serious problem arises from error:</p>
-<p>this can be because the use itself is low stakes <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> or because you have mechanisms in place to verify information.</p></li>
-<li><p>The user can easily identify error</p>
-<ol type="a">
+<li>No serious problem arises from error:
+<ul>
+<li>This can be because the use itself is low stakes <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li>Or because you have mechanisms in place to verify information.</li>
+</ul></li>
+<li>The user can easily identify error
+<ul>
 <li>Via UI design</li>
 <li>Via expertise or</li>
 <li>Via directly examining and comparing data</li>
-</ol></li>
+</ul></li>
 </ol>
+</section>
+<section id="on-using-rag" class="level2">
+<h2 class="anchored" data-anchor-id="on-using-rag">On using RAG</h2>
 <p>The most touted uses of RAG in medicine are question answering and paper or information summarization.</p>
 <p>The state of the art in medical question answering on closed, carefully selected datasets using models that in all likelihood have had access to the test data, is around 80% which means the probability of getting at least one wrong answer in 10 is around 89%.The median numbers are a whole lot worse. If you can’t afford the latest model to be answering your questions or doing the generation, imagine the possibility of error. (or do the math, your call)</p>
 <p>Stats for summarization are a whole lot worse. And a whole lot tougher to quantify. But, if you want some quick summaries, with the aim of deciding what to focus on, or what to read etc. this is probably pretty good.</p>
@@ -184,9 +209,10 @@ ul.task-list li input[type="checkbox"] {
 <p>Xiong, G., Jin, Q., Lu, Z., &amp; Zhang, A. (2024). Benchmarking retrieval-augmented generation for medicine. <a href="https://doi.org/10.48550/arXiv.2402.13178">arXiv preprint arXiv:2402.13178</a></p>
 <p>Xiong, G., Jin, Q., Wang, X., Zhang, M., Lu, Z., &amp; Zhang, A. (2024). Improving retrieval-augmented generation in medicine with iterative follow-up questions. <a href="https://doi.org/10.48550/arXiv.2408.00727">arXiv preprint arXiv:2408.00727</a></p>
 <p>Turpin, M., Michael, J., Perez, E., &amp; Bowman, S. (2024). Language models don’t always say what they think: unfaithful explanations in chain-of-thought prompting. <a href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/ed3fea9033a80fea1376299fa7863f4a-Abstract-Conference.html">Advances in Neural Information Processing Systems, 36</a></p>
-<p>Chen, J., Chen, L., Huang, H., &amp; Zhou, T. (2023). When do you need chain-of-thought prompting for chatgpt?. <a href="https://doi.org/10.48550/arXiv.2304.03262">arXiv preprint arXiv:2304.03262</a></p>
+<p>Chen, J., Chen, L., Huang, H., &amp; Zhou, T. (2023). When do you need chain-of-thought prompting for chatgpt?. <a href="https://doi.org/10.48550/arXiv.2304.03262">arXiv preprint arXiv:2304.03262</a> a</p>
 
 
+</section>
 </section>
 
 
